@@ -79,6 +79,15 @@ interface Dunagan_Base_Controller_Adminhtml_Interface
      */
     public function getIndexBlockName();
 
+    /**
+     * Should be the controller that will process the index actions
+     * e.g. if the url for the index action is admin/{controller}/index
+     *              then this method should return the {controller} value
+     *
+     *
+     * @return string
+     */
+    public function getIndexActionsController();
 
     // OPTIONAL
 
@@ -91,17 +100,6 @@ interface Dunagan_Base_Controller_Adminhtml_Interface
      *                      getControllerActiveMenuPath()
      */
     public function getAclPath();
-
-    /**
-     * Should be the controller that will process the index actions
-     * e.g. if the url for the index action is {frontname}/{controller}/index
-     *              then this method should return the {controller} value
-     *
-     * By default, Dunagan_Base_Controller_Adminhtml_Abstract returns 'index'
-     *
-     * @return string
-     */
-    public function getIndexActionsController();
 
     /**
      * Allows for creating blocks to be shown on the page above the grid

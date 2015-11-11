@@ -77,11 +77,6 @@ abstract class Dunagan_Base_Controller_Adminhtml_Abstract
         return $uri_path;
     }
 
-    public function getIndexActionsController()
-    {
-        return 'index';
-    }
-
     public function getObjectClassname()
     {
         $objects_module_instance = $this->getModuleInstance();
