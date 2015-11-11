@@ -34,15 +34,6 @@ interface Dunagan_Base_Controller_Adminhtml_Interface
     public function getModuleInstance();
 
     /**
-     * Should be the controller that will process the index actions
-     * e.g. if the url for the index action is {frontname}/{controller}/index
-     *              then this method should return the {controller} value
-     *
-     * @return string
-     */
-    public function getIndexActionsController();
-
-    /**
      * Should be the name of whatever parameter will pass the object to be
      * created/edited/deleted's id to the controller
      *
@@ -100,6 +91,17 @@ interface Dunagan_Base_Controller_Adminhtml_Interface
      *                      getControllerActiveMenuPath()
      */
     public function getAclPath();
+
+    /**
+     * Should be the controller that will process the index actions
+     * e.g. if the url for the index action is {frontname}/{controller}/index
+     *              then this method should return the {controller} value
+     *
+     * By default, Dunagan_Base_Controller_Adminhtml_Abstract returns 'index'
+     *
+     * @return string
+     */
+    public function getIndexActionsController();
 
     /**
      * Allows for creating blocks to be shown on the page above the grid

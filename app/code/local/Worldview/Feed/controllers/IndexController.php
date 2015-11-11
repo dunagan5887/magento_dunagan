@@ -10,6 +10,16 @@ class Worldview_Feed_IndexController
     extends Dunagan_Base_Controller_Adminhtml_Abstract
     implements Dunagan_Base_Controller_Adminhtml_Interface
 {
+    public function getModuleInstance()
+    {
+        return 'feed';
+    }
+
+    public function getObjectParamName()
+    {
+        return 'feed';
+    }
+
     public function getModuleGroupname()
     {
         return 'worldview_feed';

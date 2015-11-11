@@ -60,9 +60,4 @@ class Worldview_Source_IndexController
     {
         return 'adminhtml_source';
     }
-
-    public function getFormActionsController()
-    {
-        return 'index';
-    }
 }

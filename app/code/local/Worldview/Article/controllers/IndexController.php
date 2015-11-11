@@ -68,9 +68,4 @@ class Worldview_Article_IndexController
     {
         return 'adminhtml_article';
     }
-
-    public function getFormActionsController()
-    {
-        return 'index';
-    }
 } 

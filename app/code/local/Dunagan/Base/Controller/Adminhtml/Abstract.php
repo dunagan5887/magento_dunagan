@@ -21,8 +21,6 @@ abstract class Dunagan_Base_Controller_Adminhtml_Abstract
 
     abstract public function getModuleInstance();
 
-    abstract public function getIndexActionsController();
-
     abstract public function getObjectParamName();
 
     // The following is accessible via accessor method getModuleHelper()
@@ -77,6 +75,11 @@ abstract class Dunagan_Base_Controller_Adminhtml_Abstract
     {
         $uri_path = sprintf('%s/%s/%s', $this->getModuleRouterFrontname(), $this->getIndexActionsController(), $action);
         return $uri_path;
+    }
+
+    public function getIndexActionsController()
+    {
+        return 'index';
     }
 
     public function getObjectClassname()
