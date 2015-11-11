@@ -23,7 +23,7 @@ class Worldview_Feed_Block_Process_Index
     public function getActionButtonsToRender()
     {
         $article_retrieval_process_button = array(
-            'action_url' => Mage::getModel('adminhtml/url')->getUrl('worldview_feed/process/articleRetrieval'),
+            'action_url' => Mage::getModel('adminhtml/url')->getUrl('adminhtml/WorldviewFeed_process/articleRetrieval'),
             'label' => 'Retrieve Articles'
         );
 

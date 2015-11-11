@@ -48,13 +48,13 @@
 
     <admin>
         <routers>
-            <worldview_article>
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>Worldview_Article</module>
-                    <frontName>worldview_article</frontName>
+                    <modules>
+                        <worldview_article after="Mage_Adminhtml">Worldview_Article_Adminhtml</worldview_article>
+                    </modules>
                 </args>
-            </worldview_article>
+            </adminhtml>
         </routers>
     </admin>
 </config>

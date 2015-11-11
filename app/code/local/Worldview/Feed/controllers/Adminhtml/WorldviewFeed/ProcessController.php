@@ -7,7 +7,7 @@
  * Class Worldview_Feed_ProcessController
  */
 
-class Worldview_Feed_ProcessController extends Mage_Adminhtml_Controller_Action
+class Worldview_Feed_Adminhtml_WorldviewFeed_ProcessController extends Mage_Adminhtml_Controller_Action
 {
     const EXCEPTION_EXECUTING_PROCESS = 'An uncaught exception occurred when attempting to process article retrieval in method %s::%s : %s';
 
@@ -39,6 +39,6 @@ class Worldview_Feed_ProcessController extends Mage_Adminhtml_Controller_Action
         }
 
         // Redirect to the articles grid page
-        return $this->_redirect('worldview_article/index/index');
+        return $this->_redirect('adminhtml/WorldviewArticle_index/index');
     }
 }

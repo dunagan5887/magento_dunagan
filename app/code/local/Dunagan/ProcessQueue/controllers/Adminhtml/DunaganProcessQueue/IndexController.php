@@ -171,9 +171,4 @@ class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
     {
         return 'DunaganProcessQueue_index';
     }
-
-    public function getFormBackControllerActionPath()
-    {
-        return 'DunaganProcessQueue_index/index';
-    }
 }

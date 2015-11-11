@@ -1,6 +1,6 @@
 <?php
 
-class Worldview_Source_IndexController
+class Worldview_Source_Adminhtml_WorldviewSource_IndexController
     extends Dunagan_Base_Controller_Adminhtml_Form_Abstract
     implements Dunagan_Base_Controller_Adminhtml_Form_Interface
 {
@@ -59,5 +59,10 @@ class Worldview_Source_IndexController
     public function getFormBlockName()
     {
         return 'adminhtml_source';
+    }
+
+    public function getIndexActionsController()
+    {
+        return 'WorldviewSource_index';
     }
 }

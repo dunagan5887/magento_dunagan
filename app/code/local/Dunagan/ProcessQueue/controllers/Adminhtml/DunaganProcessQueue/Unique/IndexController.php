@@ -58,9 +58,4 @@ class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_Unique_IndexController
     {
         return 'DunaganProcessQueue_unique_index';
     }
-
-    public function getFormBackControllerActionPath()
-    {
-        return 'DunaganProcessQueue_unique_index/index';
-    }
 }

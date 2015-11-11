@@ -6,7 +6,7 @@
  * class Worldview_Feed_IndexController
  */
 
-class Worldview_Feed_IndexController
+class Worldview_Feed_Adminhtml_WorldviewFeed_IndexController
     extends Dunagan_Base_Controller_Adminhtml_Abstract
     implements Dunagan_Base_Controller_Adminhtml_Interface
 {
@@ -38,5 +38,10 @@ class Worldview_Feed_IndexController
     public function getIndexBlockName()
     {
         return 'process_index';
+    }
+
+    public function getIndexActionsController()
+    {
+        return 'WorldviewFeed_index';
     }
 }

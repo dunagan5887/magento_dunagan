@@ -39,13 +39,13 @@
 
     <admin>
         <routers>
-            <worldview_feed>
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>Worldview_Feed</module>
-                    <frontName>worldview_feed</frontName>
+                    <modules>
+                        <worldview_feed after="Mage_Adminhtml">Worldview_Feed_Adminhtml</worldview_feed>
+                    </modules>
                 </args>
-            </worldview_feed>
+            </adminhtml>
         </routers>
     </admin>
 

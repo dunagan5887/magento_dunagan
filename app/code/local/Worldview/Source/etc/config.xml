@@ -45,16 +45,16 @@
             </worldview_source_setup>
         </resources>
     </global>
-    
+
     <admin>
         <routers>
-            <worldview_source>
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>Worldview_Source</module>
-                    <frontName>worldview_source</frontName>
+                    <modules>
+                        <worldview_source after="Mage_Adminhtml">Worldview_Source_Adminhtml</worldview_source>
+                    </modules>
                 </args>
-            </worldview_source>
+            </adminhtml>
         </routers>
     </admin>
 </config>
