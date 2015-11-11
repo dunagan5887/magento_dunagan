@@ -1,0 +1,109 @@
+Code sample notes
+
+Worldview was the name of my senior thesis project at the University of Illinois at Urbana-Champaign.
+The goal of the project was to aggregate news articles, run a Part-Of-Speech tagger on the articles' text,
+cluster the articles into related topics, and establish bias among articles in each cluster. Currently
+this code sample only implements functionality for retrieving article data from RSS feeds and displaying the
+articles in the Magento admin panel. My reasoning behind making this be the subject of my code sample is that
+I wanted viewers to know that this is code I personally wrote, and not code from an extension or a project at
+one of my full-time jobs. Below are notes regarding the software patterns used in my code sample.
+
+Dunagan_ProcessQueue
+
+A common task that Senior Developers implement is a process queue for tasks which should be run in the background
+via the crontab. I have constructed a module which abstracts the functionality necessary to implement such a process
+queue. The most complex piece of the process queue is ensuring that only one execution thread is processing a particular
+task at a given time. This does not mean that two execution threads can't both be processing tasks which import orders
+from an ERP system; it means that two execution threads can't both be importing the SAME order.
+
+Dunagan_ProcessQueue_Helper_Task_Processor::processQueueTask() implements the functionality which ensures that only one
+execution thread will process a given queue task. The method is generously commented to document the functionality
+being executed to ensure exclusive processing. In the live working demo of this code sample, you can see a grid of
+queue tasks in the admin panel at Worldview -> Feeds -> Process Feeds. This page allows admins to view the tasks which
+have been created, update the status of a given task, and manually execute a task (as opposed to waiting for the crontab
+to pick up the task). Currently to update the status of a task you must click on the row for the task you want to update.
+Tasks in the Pending and Error statuses can be manually executed. The "Retrieve Articles" button on this page will create
+a task, execute it, and redirect back to the grid to show the newly created/execute task.
+
+Dunagan_Process
+
+Another common task that Senior Developers implement is a cron process which may or may not be intended to be ran with
+multiple execution threads in parallel. Module Dunagan_Process provides this abstracted functionality.
+Dunagan_Process_Model_Locked_File_Cron_Abstract (and its ancestor classes) implement the architecture to easily define
+how many threads a given cron process should be allowed to have, as well as denoting a custom log file to log errors
+for the process. Currently there is only file-locking architecture built out; another potential solution would be to
+implement execution thread limits via the database on a server setup which may have multiple cron servers and a single
+database; however it is much more common to have crons restricted to run on a single server, so file locking is usually
+the more optimal solution, especially in configurations with a master-slave database setup. Currently there is not admin
+interface to see this functionality in action.
+
+
+Software Patterns implemented in the code sample
+
+Delegation and the Servant software pattern:
+Dunagan_Base_Model_Delegate_Abstract, Dunagan_Base_Model_Delegate_Interface,
+Dunagan_Base_Model_Delegator_Abstract, Dunagan_Base_Model_Delegator_Interface
+
+Responsibility delegation is a key factor in terms of creating de-coupled, re-usable code. Delegation is
+optimally accomplished by identifying sub-tasks in a process and creating separate objects to implement the
+sub-tasks’ functionality, thus providing logic modularization. Delegation is less optimally accomplished
+via inheritance, delegating responsibility to subclasses; delegation via inheritance is likely to result
+in more rigid code which is less extendable and re-usable in various tasks. The servant software pattern is
+very closely tied to the concept of delegation.
+
+In my code sample, Dunagan_Base_Helper_Processor_Abstract abstracts the functionality of loading servant
+delegate classnames from xml configuration, instantiating instances of the delegate classes, and adding
+them to the process model (which implements the Delegator interface).  As these servant delegates are used to
+provide logic/functionality modularization, they are instantiated as Helper classes. Helper classes in Magento
+follow the Singleton pattern, meaning that only one instance of the class exists at any given time
+(to preserve resources and eliminate the processing time of creating new instances of the class); the helper
+singleton instances are then cached in the static Mage::_registry array. As with the Mage::getModel() method,
+Mage:helper() follows the Factory Method software pattern in that it handles the responsibility of creating
+new instances of classes without requiring the calling block to pass in the exact name of the class being
+constructed.
+
+The specific delegates which were defined in terms of the article retrieval process are listed in
+app/code/local/Worldview/Feed/etc/config.xml node default/worldview/feed/process/article_retrieval.
+Delegation such as this enables one to create various versions of the articles retrieval process,
+specifying different data retriever functionality (perhaps to allow for calling an API to retrieve article
+data as opposed to reading an RSS feed), storing the data in volatile storage such as a NoSQL in-memory data
+store (e.g. Redis or Memcache), or different methods of logging data (perhaps deciding to email the results
+in a cron-style version of the process instead of logging the data via Magento adminhtml session messaging).
+Accomplishing any of these would be as easy as defining a new xml node underneath <article_retrieval>;
+additionally if one wished, they could load this RSS process and simply create the new delegate objects,
+assigning them to the Process object via the Dunagan_Base_Model_Delegator_Abstract::setDelegate() mutator method
+
+Template Method software pattern:
+Dunagan_Base_Controller_Adminhtml_Form_Abstract, Dunagan_Base_Controller_Adminhtml_Form_Interface
+Dunagan_Base_Block_Adminhtml_Widget_Form_Container, Dunagan_Base_Block_Adminhtml_Widget_Form,
+Dunagan_Base_Block_Adminhtml_Widget_Form_Interface
+
+Magento’s Mage_Adminhtml_Controller_Action class follows the Front Controller software pattern, handling the
+responsibilities of dispatching requests. While a good deal of functionality is implemented in this class
+(e.g. validating form keys, loading page layout, verifying ACL permissions) there is a good deal of functionality
+which can further by implemented to save subclasses the trouble of needing to implement logic which can be
+templated. Dunagan_Base_Controller_Adminhtml_Form_Abstract implements a great deal of functionality that is
+commonly used by controllers which display a data form and execute CRUD functionality (deletion has not been implemented
+yet). Subclasses extending this class can accomplish a great deal of functionality while defining/implementing minimal
+logic. As per the template method, Dunagan_Base_Controller_Adminhtml_Form_Abstract allows for the redefining of tasks by
+overriding the parent class’s methods. It also declares validateDataAndCreateObject() and validateDataAndUpdateObject()
+as abstract due to the fact that each individual subclass will likely have very specific data points to check and
+validate. However it does provide methods _assertDataIsRestrictedToFields() and _assertRequiredFieldsAreIncluded()
+to handle the very common tasks of verifying that certain data points have been passed in and others have not
+been tampered with. As a result of the abstract template, classes Worldview_Article_IndexController and
+Worldview_Source_IndexController need to implement a relatively minuscule amount of code, only needing to
+provide data definition. Likewise, Dunagan_Base_Block_Adminhtml_Widget_Form provides a template for a block
+class which creates a form, providing methods to handle the syntax regarding the addition of fields to the form.
+
+
+Decorator software pattern: Dunagan_Base_Helper_Decorator_Html
+In terms of my code sample, there is data which would naturally be logged once the process to retrieve articles
+has been executed. One such method of logging would be to log data into a file. Another is to show a quick
+summary of the execution to the user in the admin panel using Magento’s native admin session messaging. Such
+messages are passed into Mage_Adminhtml_Model_Session (though parent class Mage_Core_Model_Session_Abstract
+actually implements the methods which receive these messages). When we are passing the success/notice/failure
+messages from a retrieval execution to the session model, we can send styled html. Decorator class
+Dunagan_Base_Helper_Decorator_Html implements the styling of the messages sent to the session model. This is
+similar to Magento’s native grid column renderers which handle any styling of data which is shown in a grid.
+This allows the log data coming from the process to be html-styled when we are reporting to the admin model,
+without affecting the log data which is written to log files on the server.
