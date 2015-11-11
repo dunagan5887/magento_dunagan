@@ -127,14 +127,15 @@ abstract class Worldview_Feed_Helper_Logger_Article_Retrieval_Abstract
         }
 
         $number_of_persisted_articles = count($array_of_persisted_articles_from_source);
-        $success_message = sprintf(self::SUCCESS_NUMBER_OF_PERSISTED_ARTICLES, $number_of_persisted_articles, $source_name);
-        $this->_addDataToCurrentLogString($success_message);
+        $number_of_persisted_articles_success_message = sprintf(self::SUCCESS_NUMBER_OF_PERSISTED_ARTICLES, $number_of_persisted_articles, $source_name);
+        $decorated_success_message = $this->decorateSuccessMessage($number_of_persisted_articles_success_message);
+        $this->_addDataToCurrentLogString($decorated_success_message);
 
         foreach ($array_of_persisted_articles_from_source as $persistedArticle)
         {
             // For some subclasses of log, we'll want to log more of the article data which was returned that others
             $article_persisted_success_message = $this->getArticlePersistSuccessMessage($source_code, $persistedArticle);
-            if (!empty($decorated_success_message))
+            if (!empty($article_persisted_success_message))
             {
                 $decorated_success_message = $this->decorateSuccessMessage($article_persisted_success_message);
                 $this->_addDataToCurrentLogString($decorated_success_message);

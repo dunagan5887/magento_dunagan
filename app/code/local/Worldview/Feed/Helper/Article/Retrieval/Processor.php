@@ -23,6 +23,18 @@ class Worldview_Feed_Helper_Article_Retrieval_Processor
     const ARTICLE_PERSISTER_DELEGATE_CODE = 'article_persister';
     const PROCESS_LOGGER_DELEGATE_CODE = 'process_logger';
 
+    public function createQueueTaskInProcessingState()
+    {
+        $articleRetrievalTaskObject = Mage::helper('dunagan_process_queue/task_processor')
+                                        ->createQueueTaskInProcessingState(
+                                            Worldview_Feed_Model_Task_Retrieve_Article::TASK_CODE,
+                                            Worldview_Feed_Model_Task_Retrieve_Article::TASK_OBJECT,
+                                            Worldview_Feed_Model_Task_Retrieve_Article::TASK_METHOD,
+                                            null
+                                        );
+        return $articleRetrievalTaskObject;
+    }
+
     protected function _getProcessConfigurationSubPath()
     {
         return self::RETRIEVAL_PROCESS_CLASSNAME_CONFIG;

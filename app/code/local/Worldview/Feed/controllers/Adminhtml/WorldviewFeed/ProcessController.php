@@ -16,18 +16,14 @@ class Worldview_Feed_Adminhtml_WorldviewFeed_ProcessController extends Mage_Admi
     {
         try
         {
-            // Need to make modifications to be able to get log data in html, not text
-            $helper = Mage::helper('worldview_feed/article_retrieval_processor');
-            $process_log_data_objects_array = $helper->executeProcesses();
+            $articleRetrievalTaskObject = Mage::helper('worldview_feed/article_retrieval_processor')
+                                            ->createQueueTaskInProcessingState();
 
-            $log_html_string = '';
+            $taskExecutionResult = Mage::helper('dunagan_process_queue/task_processor')
+                                        ->processQueueTask($articleRetrievalTaskObject, true);
 
-            foreach($process_log_data_objects_array as $processLogData)
-            {
-                $log_html_string .= $processLogData->getCurrentLogData();
-            }
-
-            Mage::getSingleton('adminhtml/session')->addSuccess($this->__($log_html_string));
+            $success_message = $taskExecutionResult->getTaskStatusMessage();
+            Mage::getSingleton('adminhtml/session')->addSuccess($this->__($success_message));
         }
         catch(Exception $e)
         {

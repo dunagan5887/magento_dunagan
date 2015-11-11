@@ -10,7 +10,11 @@
         <models>
             <worldview_feed>
                 <class>Worldview_Feed_Model</class>
+                <resourceModel>worldview_feed_mysql4</resourceModel>
             </worldview_feed>
+            <worldview_feed_mysql4>
+                <class>Worldview_Feed_Model_Mysql4</class>
+            </worldview_feed_mysql4>
         </models>
 
         <helpers>
