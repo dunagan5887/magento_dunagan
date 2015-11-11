@@ -43,4 +43,9 @@ class Worldview_Feed_Adminhtml_WorldviewFeed_IndexController
     {
         return 'task_index';
     }
+
+    public function getControllerActiveMenuPath()
+    {
+        return 'worldview/feeds/process';
+    }
 }
