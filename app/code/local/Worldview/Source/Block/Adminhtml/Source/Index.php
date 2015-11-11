@@ -12,7 +12,7 @@ class Worldview_Source_Block_Adminhtml_Source_Index
     public function __construct()
     {
         parent::__construct();
-        // TODO ALLOW FOR ADDING SOURCES IF ADMIN TO DEMOSTRATE ABILITY
+        // TODO ALLOW FOR ADDING SOURCES TO DEMONSTRATE FUNCTIONALITY EXISTS
         // Don't want to allow for the addition of sources via admin panel at this time
         $this->_removeButton('add');
     }
@@ -20,7 +20,7 @@ class Worldview_Source_Block_Adminhtml_Source_Index
     public function getActionButtonsToRender()
     {
         $article_retrieval_process_button = array(
-            'action_url' => Mage::getModel('adminhtml/url')->getUrl('worldview_feed/process/articleRetrieval'),
+            'action_url' => Mage::getModel('adminhtml/url')->getUrl('adminhtml/WorldviewFeed_process/articleRetrieval'),
             'label' => 'Retrieve Articles From Sources'
         );
 
