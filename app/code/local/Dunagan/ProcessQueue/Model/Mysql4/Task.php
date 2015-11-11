@@ -64,7 +64,7 @@ class Dunagan_ProcessQueue_Model_Mysql4_Task extends Mage_Core_Model_Mysql4_Abst
         $where_conditions_array = array('task_id=?' => $task_id,
                                         'status=?' => $current_status,
                                         // As an additional safety measure, don't update any rows already in processing state
-                                        'status<>?', Dunagan_ProcessQueue_Model_Task::STATUS_PROCESSING);
+                                        'status<>?' => Dunagan_ProcessQueue_Model_Task::STATUS_PROCESSING);
 
         $rows_updated = $this->_getWriteAdapter()->update($this->getMainTable(), $update_bind_array, $where_conditions_array);
         return $rows_updated;
