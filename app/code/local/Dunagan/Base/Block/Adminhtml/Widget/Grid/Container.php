@@ -24,8 +24,7 @@ class Dunagan_Base_Block_Adminhtml_Widget_Grid_Container
 
     public function __construct()
     {
-        $module_groupname = $this->getAction()->getModuleGroupname();
-        $this->_blockGroup = $module_groupname;
+        $this->_blockGroup = $this->getAction()->getBlocksModuleGroupname();
         $this->_controller = $this->getAction()->getIndexBlockName();
 
         parent::__construct();
@@ -33,6 +32,7 @@ class Dunagan_Base_Block_Adminhtml_Widget_Grid_Container
         $this->_headerText = $this->getDefinedHeaderText();
         $this->_objectId = $this->getObjectId();
 
+        $this->removeButton('add');
         $action_buttons_array = $this->getActionButtonsToRender();
 
         foreach ($action_buttons_array as $button_id => $button_data)
@@ -53,7 +53,7 @@ class Dunagan_Base_Block_Adminhtml_Widget_Grid_Container
 
             $this->_addButton(
                 $button_id, array(
-                    'label' => Mage::helper($module_groupname)->__($button_label),
+                    'label' => $this->getAction()->getModuleHelper()->__($button_label),
                     'onclick' => "document.location='" .$button_action_url . "'",
                     'level' => -1
                 )
@@ -66,9 +66,8 @@ class Dunagan_Base_Block_Adminhtml_Widget_Grid_Container
 
     public function getDefinedHeaderText()
     {
-        $module_groupname = $this->getAction()->getModuleGroupname();
         $module_instance_description = $this->getAction()->getModuleInstanceDescription();
-        return Mage::helper($module_groupname)->__($module_instance_description);
+        return $this->getAction()->getModuleHelper()->__($module_instance_description);
     }
 
     public function getObjectId()

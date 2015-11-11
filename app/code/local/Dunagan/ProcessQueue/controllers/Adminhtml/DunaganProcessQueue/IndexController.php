@@ -13,6 +13,32 @@ class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
     const GENERIC_ADMIN_FACING_ERROR_MESSAGE = 'An error occurred with your request. Please try again.';
     const ERROR_UPDATE_STATUS_UNALLOWED = 'You do not have authorization to update the status for this task';
     const NOTICE_TASK_ACTION = 'The attempt to %s the process queue task with id %s has completed.';
+    const NOTICE_EXPEDITE_COMPLETED = 'The attempt to expedite tasks has completed';
+    const EXCEPTION_EXPEDITING = 'An exception occurred while expediting tasks: %s';
+
+    public function expediteAction()
+    {
+        try
+        {
+            $codes_to_filter_by = $this->getCodesToFilterBy();
+
+            Mage::helper('dunagan_process_queue/task_processor')->processQueueTasks($codes_to_filter_by, true);
+            Mage::helper('dunagan_process_queue/task_processor_unique')->processQueueTasks($codes_to_filter_by, true);
+        }
+        catch(Exception $e)
+        {
+            $error_message = $this->__(self::EXCEPTION_EXPEDITING, $e->getMessage());
+            Mage::log($error_message);
+            Mage::getSingleton('adminhtml/session')->addError($error_message);
+            $exception = new Dunagan_Base_Controller_Varien_Exception($error_message);
+            $exception->prepareRedirect('*/*/index');
+            throw $exception;
+        }
+
+        $notice_message = $this->__(self::NOTICE_EXPEDITE_COMPLETED);
+        Mage::getSingleton('adminhtml/session')->addNotice($this->__($notice_message));
+        $this->_redirect('*/*/index');
+    }
 
     public function actOnTaskAction()
     {
@@ -104,6 +130,11 @@ class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
     public function getHeaderBlockName()
     {
         return 'adminhtml_index';
+    }
+
+    public function getCodesToFilterBy()
+    {
+        return array();
     }
 
     /**

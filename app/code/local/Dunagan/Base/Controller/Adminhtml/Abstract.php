@@ -28,15 +28,14 @@ abstract class Dunagan_Base_Controller_Adminhtml_Abstract
 
     public function indexAction()
     {
-        $module_groupname = $this->getModuleGroupname();
         $module_description = $this->getModuleInstanceDescription();
-        $module_block_classname = $module_groupname . '/' . $this->getIndexBlockName();
+        $module_block_classname = $this->getBlocksModuleGroupname() . '/' . $this->getIndexBlockName();
 
         $this->loadLayout()
             ->_setActiveMenuValue()
-            ->_setSetupTitle(Mage::helper($module_groupname)->__($module_description))
+            ->_setSetupTitle($this->getModuleHelper()->__($module_description))
             ->_addBreadcrumb()
-            ->_addBreadcrumb(Mage::helper($module_groupname)->__($module_description), Mage::helper($module_groupname)->__($module_description))
+            ->_addBreadcrumb($this->getModuleHelper()->__($module_description), $this->getModuleHelper()->__($module_description))
             ->loadBlocksBeforeGrid()
             ->_addContent($this->getLayout()->createBlock($module_block_classname))
             ->loadBlocksAfterGrid()
@@ -58,7 +57,7 @@ abstract class Dunagan_Base_Controller_Adminhtml_Abstract
         $this->loadLayout();
 
         $rootBlock = $this->getLayout()->createBlock('core/text_list', 'root', array('output' => "toHtml"));
-        $grid_block_classname = $this->getModuleGroupname() . '/' . $this->getIndexBlockName() . '_grid';
+        $grid_block_classname = $this->getBlocksModuleGroupname() . '/' . $this->getIndexBlockName() . '_grid';
         $gridBlock = $this->getLayout()->createBlock($grid_block_classname, 'ajax.grid');
         $rootBlock->append($gridBlock, 'ajax.grid');
 
@@ -111,16 +110,15 @@ abstract class Dunagan_Base_Controller_Adminhtml_Abstract
 
     protected function _addBreadcrumb($label = null, $title = null, $link=null)
     {
-        $module_groupname = $this->getModuleGroupname();
         $module_description = $this->getModuleInstanceDescription();
 
         if (is_null($label))
         {
-            $label = Mage::helper($module_groupname)->__($module_description);
+            $label = $this->getModuleHelper()->__($module_description);
         }
         if (is_null($title))
         {
-            $title = Mage::helper($module_groupname)->__($module_description);
+            $title = $this->getModuleHelper()->__($module_description);
         }
         return parent::_addBreadcrumb($label, $title, $link);
     }
@@ -138,6 +136,11 @@ abstract class Dunagan_Base_Controller_Adminhtml_Abstract
         }
 
         return true;
+    }
+
+    public function getBlocksModuleGroupname()
+    {
+        return $this->getModuleGroupname();
     }
 
     public function loadBlocksBeforeGrid()

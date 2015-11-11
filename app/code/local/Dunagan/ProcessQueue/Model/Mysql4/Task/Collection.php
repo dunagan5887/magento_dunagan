@@ -34,9 +34,23 @@ class Dunagan_ProcessQueue_Model_Mysql4_Task_Collection extends Mage_Core_Model_
         return $this;
     }
 
+    public function addCustomCodesFilter($custom_codes_filter_array)
+    {
+        $this->addFieldToFilter('code', $custom_codes_filter_array);
+        return $this;
+    }
+
     public function addCodeFilter($code)
     {
-        $this->addFieldToFilter('code', $code);
+        if (!is_array($code))
+        {
+            $this->addFieldToFilter('code', $code);
+        }
+        else
+        {
+            $this->addFieldToFilter('code', array('in' => $code));
+        }
+
         return $this;
     }
 

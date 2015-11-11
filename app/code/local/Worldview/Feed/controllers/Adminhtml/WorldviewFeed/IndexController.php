@@ -6,42 +6,41 @@
  * class Worldview_Feed_IndexController
  */
 
+require_once('Dunagan/ProcessQueue/controllers/Adminhtml/DunaganProcessQueue/IndexController.php');
 class Worldview_Feed_Adminhtml_WorldviewFeed_IndexController
-    extends Dunagan_Base_Controller_Adminhtml_Abstract
+    extends Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
     implements Dunagan_Base_Controller_Adminhtml_Interface
 {
-    public function getModuleInstance()
+    public function loadBlocksBeforeGrid()
     {
-        return 'feed';
+        $this->_addContent($this->getLayout()->createBlock('worldview_feed/process_index'));
+        $this->_addContent($this->getLayout()->createBlock('worldview_feed/task_summary'));
+
+        return $this;
     }
 
-    public function getObjectParamName()
+    public function getCodesToFilterBy()
     {
-        return 'feed';
-    }
-
-    public function getModuleGroupname()
-    {
-        return 'worldview_feed';
-    }
-
-    public function getControllerActiveMenuPath()
-    {
-        return 'worldview/feeds/process';
-    }
-
-    public function getModuleInstanceDescription()
-    {
-        return 'Feed Processor';
-    }
-
-    public function getIndexBlockName()
-    {
-        return 'process_index';
+        return array(Worldview_Feed_Model_Task_Retrieve_Article::TASK_CODE);
     }
 
     public function getIndexActionsController()
     {
         return 'WorldviewFeed_index';
+    }
+
+    public function getBlocksModuleGroupname()
+    {
+        return 'worldview_feed';
+    }
+
+    public function getFormBlockName()
+    {
+        return 'task';
+    }
+
+    public function getIndexBlockName()
+    {
+        return 'task_index';
     }
 }

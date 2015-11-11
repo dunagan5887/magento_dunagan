@@ -7,6 +7,9 @@
 class Dunagan_ProcessQueue_Block_Adminhtml_Task_Index_Grid
     extends Dunagan_Base_Block_Adminhtml_Widget_Grid
 {
+    protected $_defaultSort     = 'created_at';
+    protected $_defaultDir      = 'desc';
+
     protected function _prepareColumns()
     {
         $this->addColumn('action', array(
@@ -50,19 +53,14 @@ class Dunagan_ProcessQueue_Block_Adminhtml_Task_Index_Grid
 
         $this->addColumn('serialized_arguments_object', array(
             'header'    => $this->_getTranslationHelper()->__('Serialized Arguments Object'),
-            'width'     => '250',
             'align'     => 'left',
             'index'     => 'serialized_arguments_object',
-            'type'      => 'text'
+            'type'      => 'text',
+            'escape'    => true
         ));
 
-        $this->addColumn('status_message', array(
-            'header'    => $this->_getTranslationHelper()->__('Status Message'),
-            'width'     => '250',
-            'align'     => 'left',
-            'index'     => 'status_message',
-            'type'      => 'text'
-        ));
+        $status_message_column_data = $this->getStatusMessageColumnData();
+        $this->addColumn('status_message', $status_message_column_data);
 
         $this->addColumn('created_at', array(
             'header'    => $this->_getTranslationHelper()->__('Created At'),
@@ -80,5 +78,56 @@ class Dunagan_ProcessQueue_Block_Adminhtml_Task_Index_Grid
         ));
 
         return parent::_prepareColumns();
+    }
+
+    public function getStatusMessageColumnData()
+    {
+        $escape_status_message = $this->escapeStatusMessage();
+        $column_data =  array(
+            'header'    => $this->_getTranslationHelper()->__('Status Message'),
+            'align'     => 'left',
+            'index'     => 'status_message',
+            'type'      => 'text',
+            'escape'    => $escape_status_message
+        );
+
+        $string_limit = $this->getStatusMessageStringLimit();
+        if (!is_null($string_limit))
+        {
+            $column_data['string_limit'] = $string_limit;
+        }
+
+        return $column_data;
+    }
+
+    public function escapeStatusMessage()
+    {
+        return true;
+    }
+
+    public function getStatusMessageStringLimit()
+    {
+        return null;
+    }
+
+    /**
+     * Array of codes to filter by
+     *
+     * @return array
+     */
+    public function getCodesToFilterBy()
+    {
+        return $this->getAction()->getCodesToFilterBy();
+    }
+
+    public function setCollection($collection)
+    {
+        $codes_to_filter_by = $this->getCodesToFilterBy();
+        if (!empty($codes_to_filter_by))
+        {
+            $collection->addCodeFilter($codes_to_filter_by);
+        }
+
+        parent::setCollection($collection);
     }
 }

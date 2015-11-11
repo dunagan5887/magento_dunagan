@@ -32,7 +32,7 @@ abstract class Dunagan_Base_Block_Adminhtml_Widget_Form
 
         $form = new Varien_Data_Form(array('id' => 'edit_form', 'action' => $this->getActionUrl(), 'method' => 'post'));
         $form->setUseContainer(true);
-        $html_id_prefix = $controllerAction->getModuleGroupname() . '_';
+        $html_id_prefix = $controllerAction->getBlocksModuleGroupname() . '_';
         $form->setHtmlIdPrefix($html_id_prefix);
 
         $fieldset = $form->addFieldset(

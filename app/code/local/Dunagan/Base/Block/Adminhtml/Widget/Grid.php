@@ -30,7 +30,7 @@ class Dunagan_Base_Block_Adminhtml_Widget_Grid
         parent::__construct();
         $controllerAction = $this->getAction();
         $grid_path = str_replace('/', '_', $controllerAction->getControllerActiveMenuPath());
-        $grid_id = $controllerAction->getModuleGroupname() . '_' . $grid_path;
+        $grid_id = $controllerAction->getBlocksModuleGroupname() . '_' . $grid_path;
 
         $this->setId($grid_id);
         $this->setUseAjax(true);

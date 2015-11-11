@@ -41,7 +41,7 @@ abstract class Dunagan_Base_Block_Adminhtml_Widget_Container
     public function __construct()
     {
         $this->_headerText = $this->getDefinedHeaderText();
-        $block_module_groupname = $this->getAction()->getModuleGroupname();
+        $block_module_groupname = $this->getAction()->getBlocksModuleGroupname();
 
         $this->_objectId = $this->getObjectId();
         $this->setTemplate('widget/view/container.phtml');

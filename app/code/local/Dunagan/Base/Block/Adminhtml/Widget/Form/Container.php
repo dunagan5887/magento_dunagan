@@ -27,7 +27,7 @@ class Dunagan_Base_Block_Adminhtml_Widget_Form_Container
         $controllerAction = $this->getAction();
         $this->_objectId = $controllerAction->getObjectParamName();
         $this->_controller = $controllerAction->getFormBlockName();
-        $this->_blockGroup = $controllerAction->getModuleGroupname();
+        $this->_blockGroup = $controllerAction->getBlocksModuleGroupname();
 
         parent::__construct();
     }
@@ -48,11 +48,11 @@ class Dunagan_Base_Block_Adminhtml_Widget_Form_Container
     {
         $controllerAction = $this->getAction();
         $pageTitle = $this->getPageTitleToRender();
-        $groupname = $controllerAction->getModuleGroupname();
+        $translationHelper = $this->getAction()->getModuleHelper();
 
         if (!empty($pageTitle))
         {
-            return Mage::helper($groupname)->__($pageTitle);
+            return $translationHelper->__($pageTitle);
         }
 
         // We expect the $pageTitle to be passed in, but prepare for the case where it's not
@@ -62,10 +62,10 @@ class Dunagan_Base_Block_Adminhtml_Widget_Form_Container
         if (is_object($objectToEdit) && $objectToEdit->getId())
         {
             $header_text = 'Edit ' . $object_description;
-            return Mage::helper($groupname)->__($header_text);
+            return $translationHelper->__($header_text);
         }
 
         $header_text = 'Add New ' . $object_description;
-        return Mage::helper($groupname)->__($header_text);
+        return $translationHelper->__($header_text);
     }
 }

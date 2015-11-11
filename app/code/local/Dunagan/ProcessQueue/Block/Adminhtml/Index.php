@@ -117,7 +117,7 @@ class Dunagan_ProcessQueue_Block_Adminhtml_Index
 
     public function getTaskCodeToFilterBy()
     {
-        return null;
+        return $this->getAction()->getCodesToFilterBy();
     }
 
     protected function _getCompletedAndAllQueueTasks()
@@ -149,7 +149,8 @@ class Dunagan_ProcessQueue_Block_Adminhtml_Index
 
     protected function _getExpediteTasksButtonActionUrl()
     {
-        return $this->getAction()->getUriPathForIndexAction('expedite');
+        $expedite_route = $this->getAction()->getUriPathForIndexAction('expedite');
+        return $this->getUrl($expedite_route);
     }
 
     protected function _getTaskProcessorHelper()

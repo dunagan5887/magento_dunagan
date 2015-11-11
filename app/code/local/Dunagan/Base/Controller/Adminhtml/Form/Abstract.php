@@ -49,9 +49,9 @@ abstract class Dunagan_Base_Controller_Adminhtml_Form_Abstract
         {
             // NOTE: It is expected that the block used to render the form container for these actions will descend from
             //    Dunagan_Base_Block_Adminhtml_Widget_Form_Container
-            $block_to_create_classname = $this->getModuleGroupname() . '/' . $this->getFormBlockName() . '_edit';
+            $block_to_create_classname = $this->getBlocksModuleGroupname() . '/' . $this->getFormBlockName() . '_edit';
             $blockToCreate = $this->getLayout()->createBlock($block_to_create_classname);
-            $block_to_create_name_in_layout = $this->getModuleGroupname() . '_' . $this->getModuleInstance() . '_edit';
+            $block_to_create_name_in_layout = $this->getBlocksModuleGroupname() . '_' . $this->getModuleInstance() . '_edit';
             $blockToCreate->setNameInLayout($block_to_create_name_in_layout);
 
             $object_description = $this->getObjectDescription();
@@ -183,10 +183,7 @@ abstract class Dunagan_Base_Controller_Adminhtml_Form_Abstract
     public function getObjectClassname()
     {
         $objects_module_instance = $this->getModuleInstance();
-        $objects_module = $this->getModuleGroupname();
-        $object_classname = $objects_module . '/' . $objects_module_instance;
-
-        return $object_classname;
+        return $this->getCompleteClassnameBySuffix($objects_module_instance);
     }
 
     public function getUriPathForFormAction($action)

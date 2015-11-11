@@ -25,9 +25,9 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
     protected $_batch_size = 2500;
 
     // TODO Create separate database connection for queue task resource Singleton
-    public function processQueueTasks($code = null)
+    public function processQueueTasks($code = null, $expedite_mode = false)
     {
-        $processQueueTaskCollection = $this->getQueueTasksForProcessing($code);
+        $processQueueTaskCollection = $this->getQueueTasksForProcessing($code, $expedite_mode);
 
         // Update the last_executed_at value for these task rows so that the next cron iteration will pick up a different
         //  set of BATCH_SIZE rows from the call to $this->getQueueTasksForProcessing($code); above
@@ -235,14 +235,18 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         return $processQueueTaskCollection;
     }
 
-    public function getQueueTasksForProcessing($code = null)
+    public function getQueueTasksForProcessing($code = null, $expedite_mode = false)
     {
         $processQueueTaskCollection = Mage::getModel($this->_task_model_classname)
                                         ->getCollection()
                                         ->addOpenForProcessingFilter()
-                                        ->addLastExecutedAtThreshold()
                                         ->sortByLeastRecentlyExecuted()
                                         ->setPageSize($this->_batch_size);
+
+        if (!$expedite_mode)
+        {
+            $processQueueTaskCollection->addLastExecutedAtThreshold();
+        }
 
         if (!empty($code))
         {
