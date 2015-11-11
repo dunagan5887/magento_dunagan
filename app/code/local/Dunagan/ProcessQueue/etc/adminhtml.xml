@@ -26,12 +26,12 @@
             <children>
                 <dunagan_process_queue translate="title">
                     <title>Process Queue Tasks</title>
-                    <action>dunagan_process_queue/adminhtml_index</action>
+                    <action>adminhtml/DunaganProcessQueue_index/index</action>
                     <sort_order>14</sort_order>
                 </dunagan_process_queue>
                 <dunagan_process_queue_unique translate="title">
                     <title>Unique Process Queue Tasks</title>
-                    <action>dunagan_process_queue/adminhtml_unique_index</action>
+                    <action>adminhtml/DunaganProcessQueue_unique_index</action>
                     <sort_order>15</sort_order>
                 </dunagan_process_queue_unique>
             </children>

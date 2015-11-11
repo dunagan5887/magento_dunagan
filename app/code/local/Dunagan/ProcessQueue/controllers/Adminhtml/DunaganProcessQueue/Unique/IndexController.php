@@ -4,9 +4,9 @@
  * Created: 9/14/15
  */
 
-require_once('Dunagan/ProcessQueue/controllers/Adminhtml/IndexController.php');
-class Dunagan_ProcessQueue_Adminhtml_Unique_IndexController
-    extends Dunagan_ProcessQueue_Adminhtml_IndexController
+require_once('Dunagan/ProcessQueue/controllers/Adminhtml/DunaganProcessQueue/IndexController.php');
+class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_Unique_IndexController
+    extends Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
     implements Dunagan_Base_Controller_Adminhtml_Form_Interface
 {
     public function getQueueTaskProcessor()
@@ -56,11 +56,11 @@ class Dunagan_ProcessQueue_Adminhtml_Unique_IndexController
 
     public function getIndexActionsController()
     {
-        return 'adminhtml_unique_index';
+        return 'DunaganProcessQueue_unique_index';
     }
 
     public function getFormBackControllerActionPath()
     {
-        return 'adminhtml_unique_index/index';
+        return 'DunaganProcessQueue_unique_index/index';
     }
 }

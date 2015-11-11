@@ -91,9 +91,14 @@ abstract class Dunagan_Base_Controller_Adminhtml_Abstract
         return $object_classname;
     }
 
+    /**
+     * As of Magento security patch supee-6788, all admin frontnames should be adminhtml
+     *
+     * @return string
+     */
     public function getModuleRouterFrontname()
     {
-        return $this->getModuleGroupname();
+        return 'adminhtml';
     }
 
     protected function _setSetupTitle($title)

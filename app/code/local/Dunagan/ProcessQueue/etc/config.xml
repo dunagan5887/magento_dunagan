@@ -51,13 +51,13 @@
 
     <admin>
         <routers>
-            <dunagan_process_queue>
-                <use>admin</use>
+            <adminhtml>
                 <args>
-                    <module>Dunagan_ProcessQueue</module>
-                    <frontName>dunagan_process_queue</frontName>
+                    <modules>
+                        <dunagan_process_queue after="Mage_Adminhtml">Dunagan_ProcessQueue_Adminhtml</dunagan_process_queue>
+                    </modules>
                 </args>
-            </dunagan_process_queue>
+            </adminhtml>
         </routers>
     </admin>
 

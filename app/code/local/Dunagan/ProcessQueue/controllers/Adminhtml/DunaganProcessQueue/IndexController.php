@@ -4,7 +4,7 @@
  * Created: 9/14/15
  */
 
-class Dunagan_ProcessQueue_Adminhtml_IndexController
+class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
     extends Dunagan_Base_Controller_Adminhtml_Form_Abstract
     implements Dunagan_Base_Controller_Adminhtml_Form_Interface
 {
@@ -169,11 +169,11 @@ class Dunagan_ProcessQueue_Adminhtml_IndexController
 
     public function getIndexActionsController()
     {
-        return 'adminhtml_index';
+        return 'DunaganProcessQueue_index';
     }
 
     public function getFormBackControllerActionPath()
     {
-        return 'adminhtml_index/index';
+        return 'DunaganProcessQueue_index/index';
     }
 }
