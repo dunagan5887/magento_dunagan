@@ -8,6 +8,9 @@
 class Worldview_Article_Block_Adminhtml_Article_Index_Grid
     extends Dunagan_Base_Block_Adminhtml_Widget_Grid
 {
+    protected $_defaultSort     = 'publication_date';
+    protected $_defaultDir      = 'desc';
+
     public function setCollection($collection)
     {
         $source_table = $collection->getResource()->getTable('worldview_source/entity');
