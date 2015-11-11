@@ -35,6 +35,6 @@ class Worldview_Feed_Adminhtml_WorldviewFeed_ProcessController extends Mage_Admi
         }
 
         // Redirect to the articles grid page
-        return $this->_redirect('adminhtml/WorldviewArticle_index/index');
+        return $this->_redirect('adminhtml/WorldviewFeed_index/index');
     }
 }

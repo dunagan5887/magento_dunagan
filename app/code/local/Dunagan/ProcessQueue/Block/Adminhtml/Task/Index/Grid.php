@@ -7,7 +7,7 @@
 class Dunagan_ProcessQueue_Block_Adminhtml_Task_Index_Grid
     extends Dunagan_Base_Block_Adminhtml_Widget_Grid
 {
-    protected $_defaultSort     = 'created_at';
+    protected $_defaultSort     = 'last_executed_at';
     protected $_defaultDir      = 'desc';
 
     protected function _prepareColumns()

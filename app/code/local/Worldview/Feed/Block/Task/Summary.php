@@ -6,4 +6,8 @@
 
 class Worldview_Feed_Block_Task_Summary extends Dunagan_ProcessQueue_Block_Adminhtml_Index
 {
+    public function getActionButtonsArray()
+    {
+        return array();
+    }
 }

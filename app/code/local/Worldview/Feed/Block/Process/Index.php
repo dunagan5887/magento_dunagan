@@ -10,9 +10,11 @@ class Worldview_Feed_Block_Process_Index
     extends Dunagan_Base_Block_Adminhtml_Widget_Container
     implements Dunagan_Base_Block_Adminhtml_Widget_Container_Interface
 {
+    const HEADER_TEXT = 'This page demonstrates the ProcessQueue functionality at work';
+
     public function getDefinedHeaderText()
     {
-        return 'Process Feeds';
+        return self::HEADER_TEXT;
     }
 
     public function getObjectId()

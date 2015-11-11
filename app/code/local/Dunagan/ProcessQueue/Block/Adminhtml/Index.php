@@ -35,12 +35,7 @@ class Dunagan_ProcessQueue_Block_Adminhtml_Index
 
         $this->setTemplate('dunagan/process_queue/index/container.phtml');
 
-        $expedite_tasks_button = array(
-            'action_url' => $this->_getExpediteTasksButtonActionUrl(),
-            'label' => $this->_expediteTasksButtonLabel()
-        );
-
-        $action_buttons_array['expedite_tasks'] = $expedite_tasks_button;
+        $action_buttons_array = $this->getActionButtonsArray();
 
         foreach ($action_buttons_array as $button_id => $button_data)
         {
@@ -55,6 +50,18 @@ class Dunagan_ProcessQueue_Block_Adminhtml_Index
                 )
             );
         }
+    }
+
+    public function getActionButtonsArray()
+    {
+        $expedite_tasks_button = array(
+            'action_url' => $this->_getExpediteTasksButtonActionUrl(),
+            'label' => $this->_expediteTasksButtonLabel()
+        );
+
+        $action_buttons_array = array();
+        $action_buttons_array['expedite_tasks'] = $expedite_tasks_button;
+        return $action_buttons_array;
     }
 
     protected function _setHeaderText()
