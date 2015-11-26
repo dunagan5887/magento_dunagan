@@ -97,6 +97,27 @@ abstract class Dunagan_Base_Block_Adminhtml_Widget_Form
         ));
     }
 
+    protected function _addNonEditableDateFieldInLocaleTimezone(Varien_Data_Form_Element_Fieldset $fieldset, $field, $label)
+    {
+        $helper = $this->getAction()->getModuleHelper();
+
+        $date_value = $this->_getValueIfObjectIsSet($field);
+        if (!(empty($date_value)))
+        {
+            $date_value = Mage::getSingleton('core/date')->date(null, $date_value);
+        }
+
+        $fieldset->addField($field,
+            'note',
+            array(
+                'name'  => $field,
+                'label' => $helper->__($label),
+                'title' => $helper->__($label),
+                'text'  => $date_value
+            )
+        );
+    }
+
     protected function _addEditableTextareaField(Varien_Data_Form_Element_Fieldset $fieldset, $field, $label, $required = true)
     {
         $helper = $this->getAction()->getModuleHelper();
@@ -140,6 +161,24 @@ abstract class Dunagan_Base_Block_Adminhtml_Widget_Form
     {
         $boolean_options = Mage::getModel('eav/entity_attribute_source_boolean')->getAllOptions();
         $this->_addEditableSelectField($fieldset, $field, $label, $boolean_options, $required);
+    }
+
+    protected function _addNonEditableBooleanTextField(Varien_Data_Form_Element_Fieldset $fieldset, $field, $label)
+    {
+        $helper = $this->getAction()->getModuleHelper();
+        $boolean_value = $this->_getValueIfObjectIsSet($field);
+        $boolean_value = boolval($boolean_value);
+        $text_value = $boolean_value ? "Yes" : "No";
+
+        $fieldset->addField($field,
+            'note',
+            array(
+                'name'  => $field,
+                'label' => $helper->__($label),
+                'title' => $helper->__($label),
+                'text'  => $helper->__($text_value)
+            )
+        );
     }
 
     protected function _getFormElementName($field)
