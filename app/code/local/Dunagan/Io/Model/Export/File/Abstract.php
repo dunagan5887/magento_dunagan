@@ -30,6 +30,7 @@ abstract class Dunagan_Io_Model_Export_File_Abstract
                                     : $this->getTransactionFileName();
         }
 
+        $this->setExportFilename($export_filename);
         $filePath = $dirPath . DS . $export_filename;
         $ioAdapter->streamOpen($filePath, 'w+', self::FILE_PERMISSIONS);
         if(!$ioAdapter->streamLock(true))
