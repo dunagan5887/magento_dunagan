@@ -58,7 +58,7 @@ abstract class Dunagan_Base_Controller_Adminhtml_Form_Abstract
             if ($user_is_adding_a_new_object)
             {
                 // No id was passed in, user is attempting to create a new object
-                $page_title_template = 'Add New %';
+                $page_title_template = 'Add New %s';
                 $page_title = sprintf($page_title_template, $object_description);
             }
             else

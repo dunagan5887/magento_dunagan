@@ -97,12 +97,13 @@ abstract class Dunagan_Base_Block_Adminhtml_Widget_Form
         ));
     }
 
-    protected function _addNonEditableDateFieldInLocaleTimezone(Varien_Data_Form_Element_Fieldset $fieldset, $field, $label)
+    protected function _addNonEditableDateFieldInLocaleTimezone(Varien_Data_Form_Element_Fieldset $fieldset,
+                                                                $field, $label, $is_gmt_date = true)
     {
         $helper = $this->getAction()->getModuleHelper();
 
         $date_value = $this->_getValueIfObjectIsSet($field);
-        if (!(empty($date_value)))
+        if ((!(empty($date_value))) && $is_gmt_date)
         {
             $date_value = Mage::getSingleton('core/date')->date(null, $date_value);
         }
@@ -115,6 +116,28 @@ abstract class Dunagan_Base_Block_Adminhtml_Widget_Form
                 'title' => $helper->__($label),
                 'text'  => $date_value
             )
+        );
+    }
+
+    protected function _addNonEditableAdminUsernameByIdField(Varien_Data_Form_Element_Fieldset $fieldset,
+                                                               $id_field, $label)
+    {
+        if (!$this->_isObjectBeingEdited())
+        {
+            // If a new object is being created, do not add the fields
+            return;
+        }
+        // Get the admin user id
+        $object = $this->_getObjectToEdit();
+        $id_value = $object->getData($id_field);
+        // Get the username for that admin
+        $adminUser = Mage::getModel('admin/user')->load($id_value);
+        $username = $adminUser->getUsername();
+
+        $element_id = get_class($object) . '_' . $object->getId() . '_' . $id_field;
+        $helper = $this->getAction()->getModuleHelper();
+        $fieldset->addField($element_id, 'note', array('name'  => $id_field, 'label' => $helper->__($label),
+                                                       'title' => $helper->__($label), 'text'  => $username)
         );
     }
 
