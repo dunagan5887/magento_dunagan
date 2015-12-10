@@ -71,6 +71,14 @@
                     <model>dunagan_process_queue/cron::processQueueTasks</model>
                 </run>
             </dunagan_process_queue_process_tasks>
+            <dunagan_process_queue_delete_stale_successful>
+                <schedule>
+                    <cron_expr>36 4 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>dunagan_process_queue/cron_delete_stale_successful::deleteStaleSuccessfulQueueTasks</model>
+                </run>
+            </dunagan_process_queue_delete_stale_successful>
         </jobs>
     </crontab>
 </config>

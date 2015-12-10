@@ -135,10 +135,46 @@ class Dunagan_ProcessQueue_Model_Mysql4_Task extends Mage_Core_Model_Mysql4_Abst
         return $this->_getInsertDataArrayTemplate($code, $object, $method);
     }
 
-    public function deleteAllTasks($code)
+    /**
+     * @param null|string|array $task_code
+     * @param null|string $last_executed_date - Expected to be a date in 'Y-m-d H:i:s' format
+     * @return int - Number of rows deleted
+     */
+    public function deleteSuccessfulTasks($task_code = null, $last_executed_date = null)
     {
-        $where_condition_array = array('code=?' => $code);
+        $where_condition_array = array('status=?' => Dunagan_ProcessQueue_Model_Task::STATUS_COMPLETE);
+        if (!empty($task_code))
+        {
+            if (!is_array($task_code))
+            {
+                $task_code = array($task_code);
+            }
+            $where_condition_array['code in (?)'] = $task_code;
+        }
+        if (!empty($last_executed_date))
+        {
+            $where_condition_array['last_executed_at < ?'] = $last_executed_date;
+        }
         $rows_deleted = $this->_getWriteAdapter()->delete($this->getMainTable(), $where_condition_array);
+        return $rows_deleted;
+    }
+
+    public function deleteAllTasks($task_code = null)
+    {
+        if(!empty($task_code))
+        {
+            if (!is_array($task_code))
+            {
+                $task_code = array($task_code);
+            }
+            $where_condition_array = array('code in (?)' => $task_code);
+            $rows_deleted = $this->_getWriteAdapter()->delete($this->getMainTable(), $where_condition_array);
+        }
+        else
+        {
+            $rows_deleted = $this->_getWriteAdapter()->delete($this->getMainTable());
+        }
+
         return $rows_deleted;
     }
 

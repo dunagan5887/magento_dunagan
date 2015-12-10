@@ -8,6 +8,12 @@ class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
     extends Dunagan_Base_Controller_Adminhtml_Form_Abstract
     implements Dunagan_Base_Controller_Adminhtml_Form_Interface
 {
+    const ERROR_CLEARING_ALL_TASKS = 'An error occurred while clearing all tasks with job code %s: %s';
+    const ERROR_CLEARING_SUCCESSFUL_TASKS = 'An error occurred while clearing all successful tasks with job code %s: %s';
+    const SUCCESS_CLEARED_ALL_TASKS_WITH_CODE = 'Successfully cleared all tasks with code %s';
+    const SUCCESS_CLEARED_SUCCESSFUL_TASKS_WITH_CODE = 'Successfully cleared all successful tasks with code %s';
+    const SUCCESS_CLEARED_ALL_TASKS = 'Successfully cleared all tasks';
+    const SUCCESS_CLEARED_SUCCESSFUL_TASKS = 'Successfully cleared all successful tasks';
     const EXCEPTION_LOAD_TASK = 'An exception occurred while attempting to load the queued task with id %s to manually act on the task: %s';
     const EXCEPTION_ACT_ON_TASK = 'An error occurred while acting on the task with id %s: %s';
     const GENERIC_ADMIN_FACING_ERROR_MESSAGE = 'An error occurred with your request. Please try again.';
@@ -15,6 +21,8 @@ class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
     const NOTICE_TASK_ACTION = 'The attempt to %s the process queue task with id %s has completed.';
     const NOTICE_EXPEDITE_COMPLETED = 'The attempt to expedite tasks has completed';
     const EXCEPTION_EXPEDITING = 'An exception occurred while expediting tasks: %s';
+
+    protected $_adminHelper = null;
 
     public function expediteAction()
     {
@@ -79,6 +87,81 @@ class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
         $notice_message = sprintf(self::NOTICE_TASK_ACTION, $action_text, $task_id);
         Mage::getSingleton('adminhtml/session')->addNotice($this->__($notice_message));
         $this->_redirect('*/*/index');
+    }
+
+    public function clearAllTasksAction()
+    {
+        $task_codes = $this->_getTaskCodesParam();
+        $redirect_route = $this->getRequest()->getParam('redirect_route');
+        try
+        {
+            $rows_deleted = Mage::getResourceSingleton('dunagan_process_queue/task')
+                                ->deleteAllTasks($task_codes);
+        }
+        catch(Exception $e)
+        {
+            $task_codes_string = implode(', ', $task_codes);
+            $error_message = $this->__(self::ERROR_CLEARING_ALL_TASKS, $task_codes_string, $e->getMessage());
+            Mage::getSingleton('dunagan_process_queue/log')->logQueueProcessorError($error_message);
+            $this->_getAdminHelper()->throwRedirectException($error_message, $redirect_route);
+        }
+
+        if (!empty($task_code))
+        {
+            $success_message = $this->__(self::SUCCESS_CLEARED_ALL_TASKS_WITH_CODE, $task_code);
+        }
+        else
+        {
+            $success_message = $this->__(self::SUCCESS_CLEARED_ALL_TASKS);
+        }
+
+        $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
+        $this->_redirect($redirect_route);
+    }
+
+    public function clearSuccessfulTasksAction()
+    {
+        $task_codes = $this->_getTaskCodesParam();
+        $redirect_route = $this->getRequest()->getParam('redirect_route');
+        try
+        {
+            $rows_deleted = Mage::getResourceSingleton('dunagan_process_queue/task')
+                                    ->deleteSuccessfulTasks($task_codes);
+        }
+        catch(Exception $e)
+        {
+            $task_codes_string = implode(', ', $task_codes);
+            $error_message = $this->__(self::ERROR_CLEARING_SUCCESSFUL_TASKS, $task_codes_string, $e->getMessage());
+            Mage::getSingleton('dunagan_process_queue/log')->logQueueProcessorError($error_message);
+            $this->_getAdminHelper()->throwRedirectException($error_message, $redirect_route);
+        }
+
+        if (!empty($task_code))
+        {
+            $success_message = $this->__(self::SUCCESS_CLEARED_SUCCESSFUL_TASKS_WITH_CODE, $task_code);
+        }
+        else
+        {
+            $success_message = $this->__(self::SUCCESS_CLEARED_SUCCESSFUL_TASKS);
+        }
+
+        $this->_getAdminHelper()->addAdminSuccessMessage($success_message);
+        $this->_redirect($redirect_route);
+    }
+
+    /**
+     * @return array|null
+     */
+    protected function _getTaskCodesParam()
+    {
+            $task_codes_param = $this->getRequest()->getParam('task_codes', null);
+            $task_codes = explode(';', $task_codes_param);
+            if (!is_array($task_codes) || empty($task_codes))
+                {
+                    return null;
+        }
+
+        return $task_codes;
     }
 
     /**
@@ -201,5 +284,18 @@ class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
     public function getIndexActionsController()
     {
         return 'DunaganProcessQueue_index';
+    }
+
+    /**
+     * @return Dunagan_Base_Helper_Admin
+     */
+    protected function _getAdminHelper()
+    {
+        if (is_null($this->_adminHelper))
+        {
+            $this->_adminHelper = Mage::helper('dunagan_base/admin');
+        }
+
+        return $this->_adminHelper;
     }
 }
