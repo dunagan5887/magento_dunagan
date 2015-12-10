@@ -13,7 +13,6 @@ class Dunagan_ProcessQueue_Model_Cron_Delete_Stale_Successful
         try
         {
             Mage::helper('dunagan_process_queue/task')->deleteStaleSuccessfulTasks();
-            Mage::helper('reverb_process_queue/unique_task')->deleteStaleSuccessfulTasks();
         }
         catch(Exception $e)
         {
