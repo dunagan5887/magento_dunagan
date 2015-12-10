@@ -95,8 +95,7 @@ class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
         $redirect_route = $this->getRequest()->getParam('redirect_route');
         try
         {
-            $rows_deleted = Mage::getResourceSingleton('dunagan_process_queue/task')
-                                ->deleteAllTasks($task_codes);
+            $rows_deleted = $this->getQueueTaskProcessor()->deleteAllTasks($task_codes);
         }
         catch(Exception $e)
         {
@@ -125,8 +124,7 @@ class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
         $redirect_route = $this->getRequest()->getParam('redirect_route');
         try
         {
-            $rows_deleted = Mage::getResourceSingleton('dunagan_process_queue/task')
-                                    ->deleteSuccessfulTasks($task_codes);
+            $rows_deleted = $this->getQueueTaskProcessor()->deleteSuccessfulTasks($task_codes);
         }
         catch(Exception $e)
         {
@@ -205,6 +203,9 @@ class Dunagan_ProcessQueue_Adminhtml_DunaganProcessQueue_IndexController
         return $this;
     }
 
+    /**
+     * @return Dunagan_ProcessQueue_Helper_Task_Processor
+     */
     public function getQueueTaskProcessor()
     {
         return Mage::helper('dunagan_process_queue/task_processor');

@@ -273,6 +273,18 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         return $rows_updated;
     }
 
+    public function deleteAllTasks($task_codes)
+    {
+        $rows_deleted = $this->_getTaskResourceSingleton()->deleteAllTasks($task_codes);
+        return $rows_deleted;
+    }
+
+    public function deleteSuccessfulTasks($task_codes)
+    {
+        $rows_deleted = $this->_getTaskResourceSingleton()->deleteSuccessfulTasks($task_codes);
+        return $rows_deleted;
+    }
+
     /**
      * Accessor for the Task Resource Model
      *
