@@ -27,14 +27,16 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
     // TODO Create separate database connection for queue task resource Singleton
     public function processQueueTasks($code = null, $expedite_mode = false)
     {
-        $processQueueTaskCollection = $this->getQueueTasksForProcessing($code, $expedite_mode);
+        $process_queue_tasks_array = $this->getQueueTasksForProcessing($code, $expedite_mode);
+        if (empty($process_queue_tasks_array))
+        {
+            return;
+        }
 
         // Update the last_executed_at value for these task rows so that the next cron iteration will pick up a different
         //  set of BATCH_SIZE rows from the call to $this->getQueueTasksForProcessing($code); above
-        $this->updateLastExecutedAtToCurrentTime($processQueueTaskCollection);
-
-        foreach ($processQueueTaskCollection as $processQueueTaskObject)
-        {
+        $this->updateLastExecutedAtToCurrentTime($process_queue_tasks_array);
+        foreach ($process_queue_tasks_array as $processQueueTaskObject) {
             $this->processQueueTask($processQueueTaskObject);
         }
     }
@@ -253,7 +255,7 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
             $processQueueTaskCollection->addCodeFilter($code);
         }
 
-        return $processQueueTaskCollection;
+        return $processQueueTaskCollection->getItems();
     }
 
     protected function _getTaskCollectionModel()
@@ -261,15 +263,13 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         return Mage::getModel($this->_task_model_classname)->getCollection();
     }
 
-    public function updateLastExecutedAtToCurrentTime(Dunagan_ProcessQueue_Model_Mysql4_Task_Collection $processQueueTaskCollection)
+    public function updateLastExecutedAtToCurrentTime(array $process_queue_tasks_array)
     {
-        $task_objects_array = $processQueueTaskCollection->getItems();
         $task_ids = array();
-        foreach ($task_objects_array as $taskObject)
-        {
+        foreach ($process_queue_tasks_array as $taskObject) {
             $task_ids[] = $taskObject->getTaskId();
         }
-        $rows_updated = $processQueueTaskCollection->getResource()->updateLastExecutedAtToCurrentTime($task_ids);
+        $rows_updated = $this->_getTaskResourceSingleton()->updateLastExecutedAtToCurrentTime($task_ids);
         return $rows_updated;
     }
 

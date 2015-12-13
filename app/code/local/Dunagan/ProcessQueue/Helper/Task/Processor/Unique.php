@@ -10,6 +10,19 @@ class Dunagan_ProcessQueue_Helper_Task_Processor_Unique
     protected $_task_model_classname = 'dunagan_process_queue/task_unique';
     protected $_task_resource_classname = 'dunagan_process_queue/task_unique';
 
+    public function createUniqueQueueTask($code, $object, $method, $argumentsObject, $unique_id)
+    {
+        // Construct the data array for the queue Task
+        $insert_data_array_template = $this->_getTaskResourceSingleton()
+                                            ->getUniqueInsertDataArrayTemplate($code, $object, $method, $unique_id);
+        $insert_data_array_template['serialized_arguments_object'] = $argumentsObject;
+        // Create the task model and initialize the fields
+        $taskObject = Mage::getModel($this->_task_model_classname)->setData($insert_data_array_template);
+        $taskObject->setStatus(Dunagan_ProcessQueue_Model_Task::STATUS_PENDING);
+        $taskObject->save();
+        return $taskObject;
+    }
+
     /**
      * @param string $code - The task's process code
      * @param string $object - Class of the object to call the task callback method on
@@ -31,4 +44,4 @@ class Dunagan_ProcessQueue_Helper_Task_Processor_Unique
         $taskObject->save();
         return $taskObject;
     }
-} 
+}
