@@ -59,6 +59,65 @@ class Dunagan_Base_Block_Adminhtml_Widget_Grid
         return $this->getUrl($uri_path);
     }
 
+    protected function _addTextGridColumn($index, $label, $html_id = null, $align = 'left')
+    {
+        if (is_null($html_id))
+        {
+            $html_id = $index;
+        }
+
+        $this->addColumn($html_id,
+            array(
+                'header'  => $this->_getTranslationHelper()->__($label),
+                'align'   => $align,
+                'index'   => $index,
+                'type'    => 'text'
+            )
+        );
+    }
+
+    protected function _addDatetimeGridColumn($index, $label, $html_id = null, $align = 'left')
+    {
+        if (is_null($html_id))
+        {
+            $html_id = $index;
+        }
+
+        $this->addColumn($html_id,
+            array(
+                'header'  => $this->_getTranslationHelper()->__($label),
+                'align'   => $align,
+                'index'   => $index,
+                'type'   => 'datetime',
+                'renderer' => 'dunagan_base/adminhtml_widget_grid_column_renderer_datetime'
+            )
+        );
+    }
+
+    protected function _addOptionsGridColumn($index, $label, $options_array, $html_id = null, $align = 'left')
+    {
+        if (is_null($html_id))
+        {
+            $html_id = $index;
+        }
+
+        $this->addColumn($html_id,
+            array(
+                'header'  => $this->_getTranslationHelper()->__($label),
+                'align'   => $align,
+                'index'   => $index,
+                'type'    => 'options',
+                'options' => $options_array
+            )
+        );
+    }
+
+    protected function _addBooleanOptionsGridColumn($index, $label, $html_id = null, $align = 'left')
+    {
+        $boolean_options_array = Mage::getModel('eav/entity_attribute_source_boolean')->getOptionArray();
+        $this->_addOptionsGridColumn($index, $label, $boolean_options_array, $html_id, $align);
+    }
+
     /**
      * @return Mage_Core_Helper_Abstract
      */
