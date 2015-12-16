@@ -222,6 +222,20 @@ abstract class Dunagan_Base_Controller_Adminhtml_Form_Abstract
         return $this->_objectToEdit;
     }
 
+    protected function _logExceptionAndRedirectToForm(Exception $exceptionToLog, Varien_Object $objectBeingActedUpon)
+    {
+        $redirect_argument = $this->_logExceptionAndReturnRedirectArgument($exceptionToLog, $objectBeingActedUpon);
+        $form_route = $this->getUriPathForFormAction('edit');
+        return $this->_redirect($form_route, $redirect_argument);
+    }
+
+    protected function _showSuccessAndRedirectToForm($success_message, Varien_Object $objectBeingActedUpon)
+    {
+        $this->_getSession()->addSuccess($this->getModuleHelper()->__($success_message));
+        $form_route = $this->getUriPathForFormAction('edit');
+        return $this->_redirect($form_route, array($this->getObjectParamName() => $objectBeingActedUpon->getId()));
+    }
+
     protected function _assertDataIsRestrictedToFields($data_posted, $fields_to_restrict_to)
     {
         $non_permitted_fields = array_diff(array_keys($data_posted), $fields_to_restrict_to);

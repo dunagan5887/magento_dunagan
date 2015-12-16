@@ -10,6 +10,8 @@ abstract class Dunagan_Base_Controller_Adminhtml_Abstract
     extends Mage_Adminhtml_Controller_Action
     implements Dunagan_Base_Controller_Adminhtml_Interface
 {
+    const GENERIC_CUSTOMER_FACING_ERROR = 'There was an error with your request, please try again';
+
     // Documentation for these abstract classes is given in Dunagan_Base_Controller_Adminhtml_Interface
     abstract public function getModuleGroupname();
 
@@ -161,6 +163,22 @@ abstract class Dunagan_Base_Controller_Adminhtml_Abstract
     public function getAclPath()
     {
         return $this->getControllerActiveMenuPath();
+    }
+
+    protected function _logExceptionAndRedirectToGrid(Exception $exceptionToLog)
+    {
+        Mage::log($exceptionToLog->getMessage());
+        Mage::logException($exceptionToLog);
+        $this->_getSession()->addError($this->getModuleHelper()->__($exceptionToLog->getMessage()));
+        $grid_route = $this->getUriPathForIndexAction('index');
+        return $this->_redirect($grid_route);
+    }
+
+    protected function _showGenericCustomerFacingSessionErrorAndRedirectToGrid()
+    {
+        $this->_getSession()->addError($this->getModuleHelper()->__(self::GENERIC_CUSTOMER_FACING_ERROR));
+        $grid_route = $this->getUriPathForIndexAction('index');
+        return $this->_redirect($grid_route);
     }
 
     public function getModuleHelper()

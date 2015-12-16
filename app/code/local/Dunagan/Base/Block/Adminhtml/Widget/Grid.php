@@ -118,6 +118,28 @@ class Dunagan_Base_Block_Adminhtml_Widget_Grid
         $this->_addOptionsGridColumn($index, $label, $boolean_options_array, $html_id, $align);
     }
 
+    protected function _addActionGridColumn($index, $label, $renderer_classname, $width = '50px', $align = 'center',
+                                            $getter = 'getId', $html_id = null)
+    {
+        if (is_null($html_id))
+        {
+            $html_id = $index;
+        }
+
+        $this->addColumn($html_id,
+            array(
+                'header'   => $this->_getTranslationHelper()->__($label),
+                'align'    => $align,
+                'width'    => $width,
+                'type'     => 'action',
+                'getter'   => $getter,
+                'renderer' => $renderer_classname,
+                'filter'   => false,
+                'sortable' => false
+            )
+        );
+    }
+
     /**
      * @return Mage_Core_Helper_Abstract
      */
