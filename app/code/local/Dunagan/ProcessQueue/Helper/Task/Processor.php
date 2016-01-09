@@ -25,9 +25,9 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
     protected $_batch_size = 2500;
 
     // TODO Create separate database connection for queue task resource Singleton
-    public function processQueueTasks($code = null, $expedite_mode = false)
+    public function processQueueTasks($code = null, $expedite_mode = false, $invoked_by_cron = false)
     {
-        $process_queue_tasks_array = $this->getQueueTasksForProcessing($code, $expedite_mode);
+        $process_queue_tasks_array = $this->getQueueTasksForProcessing($code, $expedite_mode, $invoked_by_cron);
         if (empty($process_queue_tasks_array))
         {
             return;
@@ -237,13 +237,13 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         return $processQueueTaskCollection;
     }
 
-    public function getQueueTasksForProcessing($code = null, $expedite_mode = false)
+    public function getQueueTasksForProcessing($code = null, $expedite_mode = false, $invoked_by_cron = false)
     {
-        $processQueueTaskCollection = Mage::getModel($this->_task_model_classname)
-                                        ->getCollection()
-                                        ->addOpenForProcessingFilter()
-                                        ->sortByLeastRecentlyExecuted()
-                                        ->setPageSize($this->_batch_size);
+        $processQueueTaskCollection = Mage::getModel($this->_task_model_classname)->getCollection();
+        /* @var $processQueueTaskCollection Dunagan_ProcessQueue_Model_Mysql4_Task_Collection */
+        $processQueueTaskCollection->addOpenForProcessingFilter()
+                                   ->sortByLeastRecentlyExecuted()
+                                   ->setPageSize($this->_batch_size);
 
         if (!$expedite_mode)
         {
@@ -253,6 +253,17 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         if (!empty($code))
         {
             $processQueueTaskCollection->addCodeFilter($code);
+        }
+
+        if ($invoked_by_cron)
+        {
+            $taskHelper = Mage::helper('dunagan_process_queue/task');
+            /* @var $taskHelper Dunagan_ProcessQueue_Helper_Task */
+            $task_codes_to_omit_array = $taskHelper->getTaskCodesToOmitFromCrontabProcessing();
+            if (!empty($task_codes_to_omit_array))
+            {
+                $processQueueTaskCollection->addCodesToOmitFilter($task_codes_to_omit_array);
+            }
         }
 
         return $processQueueTaskCollection->getItems();

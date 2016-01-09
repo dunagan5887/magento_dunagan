@@ -81,4 +81,12 @@
             </dunagan_process_queue_delete_stale_successful>
         </jobs>
     </crontab>
+
+    <default>
+        <dunagan_process_queue>
+            <crontab_processor>
+                <task_codes_to_omit></task_codes_to_omit>
+            </crontab_processor>
+        </dunagan_process_queue>
+    </default>
 </config>

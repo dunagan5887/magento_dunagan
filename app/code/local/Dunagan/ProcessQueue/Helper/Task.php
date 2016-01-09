@@ -8,6 +8,29 @@ class Dunagan_ProcessQueue_Helper_Task extends Mage_Core_Helper_Data
 {
     const STALE_TIME_LAPSE = '-2 weeks';
 
+    const TASK_CODES_TO_OMIT_FROM_CRONTAB_CONFIG_PATH = 'dunagan_process_queue/crontab_processor/task_codes_to_omit';
+
+    /**
+     * Returns an array of task codes which should be not be processed via Magento crontab execution
+     *
+     * @return array
+     */
+    public function getTaskCodesToOmitFromCrontabProcessing()
+    {
+        $task_codes_to_omit = Mage::getStoreConfig(self::TASK_CODES_TO_OMIT_FROM_CRONTAB_CONFIG_PATH);
+        if (!is_array($task_codes_to_omit))
+        {
+            // There must not be any task codes flagged to be omitted
+            $task_codes_to_omit = array();
+        }
+        else
+        {
+            // $task_codes_to_omit will be an array of job_code => ""
+            $task_codes_to_omit = array_keys($task_codes_to_omit);
+        }
+        return $task_codes_to_omit;
+    }
+
     /**
      * The calling block is expected to catch exceptions
      *

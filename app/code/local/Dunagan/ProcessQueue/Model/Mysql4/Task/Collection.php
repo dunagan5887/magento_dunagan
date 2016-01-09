@@ -54,6 +54,23 @@ class Dunagan_ProcessQueue_Model_Mysql4_Task_Collection extends Mage_Core_Model_
         return $this;
     }
 
+    /**
+     * Adds a filter of codes to omit from the collection
+     *
+     * @param array|string $codes_to_omit
+     * @return $this
+     */
+    public function addCodesToOmitFilter($codes_to_omit)
+    {
+        if (!is_array($codes_to_omit))
+        {
+            $codes_to_omit = array($codes_to_omit);
+        }
+
+        $this->addFieldToFilter('code', array('nin' => $codes_to_omit));
+        return $this;
+    }
+
     public function addStatusFilter($status)
     {
         $this->addFieldToFilter('status', $status);
