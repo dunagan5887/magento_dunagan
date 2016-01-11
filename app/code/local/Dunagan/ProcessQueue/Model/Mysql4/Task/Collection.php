@@ -7,7 +7,7 @@
 
 class Dunagan_ProcessQueue_Model_Mysql4_Task_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract
 {
-    const DEFAULT_MINUTES_IN_PAST_THRESHOLD = 120;
+    protected $_default_minutes_in_past_threshold = 120;
 
     protected function _construct()
     {
@@ -24,8 +24,12 @@ class Dunagan_ProcessQueue_Model_Mysql4_Task_Collection extends Mage_Core_Model_
         return $this;
     }
 
-    public function addLastExecutedAtThreshold($minutes_in_past = self::DEFAULT_MINUTES_IN_PAST_THRESHOLD)
+    public function addLastExecutedAtThreshold($minutes_in_past = null)
     {
+        if (is_null($minutes_in_past))
+        {
+            $minutes_in_past = $this->_default_minutes_in_past_threshold;
+        }
         $current_gmt_timestamp = Mage::getSingleton('core/date')->gmtTimestamp();
         $second_in_past = $minutes_in_past * 60;
         $last_executed_at_threshold = $current_gmt_timestamp - $second_in_past;

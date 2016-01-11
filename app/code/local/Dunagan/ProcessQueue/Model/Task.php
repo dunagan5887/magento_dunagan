@@ -158,9 +158,20 @@ class Dunagan_ProcessQueue_Model_Task
         return $this->getResource()->setTaskAsCompleted($this, $success_message);
     }
 
+    protected function _returnPendingCallbackResult($notice_message)
+    {
+        $methodCallbackResultToReturn = Mage::getModel('dunagan_process_queue/task_result');
+        /* @var $methodCallbackResultToReturn Dunagan_ProcessQueue_Model_Task_Result */
+        $methodCallbackResultToReturn->setTaskStatusMessage($notice_message);
+        $methodCallbackResultToReturn->setTaskStatus(Dunagan_ProcessQueue_Model_Task::STATUS_PENDING);
+
+        return $methodCallbackResultToReturn;
+    }
+
     protected function _returnSuccessCallbackResult($success_message)
     {
         $methodCallbackResultToReturn = Mage::getModel('dunagan_process_queue/task_result');
+        /* @var $methodCallbackResultToReturn Dunagan_ProcessQueue_Model_Task_Result */
         $methodCallbackResultToReturn->setTaskStatusMessage($success_message);
         $methodCallbackResultToReturn->setTaskStatus(Dunagan_ProcessQueue_Model_Task::STATUS_COMPLETE);
 
@@ -170,6 +181,7 @@ class Dunagan_ProcessQueue_Model_Task
     protected function _returnErrorCallbackResult($error_message)
     {
         $methodCallbackResultToReturn = Mage::getModel('dunagan_process_queue/task_result');
+        /* @var $methodCallbackResultToReturn Dunagan_ProcessQueue_Model_Task_Result */
         $methodCallbackResultToReturn->setTaskStatusMessage($error_message);
         $methodCallbackResultToReturn->setTaskStatus(Dunagan_ProcessQueue_Model_Task::STATUS_ERROR);
 
@@ -188,6 +200,7 @@ class Dunagan_ProcessQueue_Model_Task
     protected function _returnAbortCallbackResult($error_message)
     {
         $methodCallbackResultToReturn = Mage::getModel('dunagan_process_queue/task_result');
+        /* @var $methodCallbackResultToReturn Dunagan_ProcessQueue_Model_Task_Result */
         $methodCallbackResultToReturn->setTaskStatusMessage($error_message);
         $methodCallbackResultToReturn->setTaskStatus(Dunagan_ProcessQueue_Model_Task::STATUS_ABORTED);
 

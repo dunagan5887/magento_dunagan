@@ -24,18 +24,39 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
 
     protected $_batch_size = 2500;
 
+    /**
+     * @var int
+     *
+     * Many times, if a tasks does not successfully complete on its first execution, it is not going to complete until
+     *  either some manual interaction occurs, an external system has required data, etc. As such, it does not make sense
+     *  to continually be processing the incomplete tasks every minute; it makes more sense to wait a substantial period
+     *  of time for the necessary conditions to be met. As such, the $_minutes_in_past_threshold variable determines
+     *  how long to wait after a queue task has been executed to re-attempt executing the task
+     */
+    protected $_minutes_in_past_threshold = 120;
+
+    protected $_wait_to_update_executed_timestamp = false;
+
     // TODO Create separate database connection for queue task resource Singleton
-    public function processQueueTasks($code = null, $expedite_mode = false, $invoked_by_cron = false)
+    public function processQueueTasks($code = null, $expedite_mode = false, $invoked_by_magento_crontab = false)
     {
-        $process_queue_tasks_array = $this->getQueueTasksForProcessing($code, $expedite_mode, $invoked_by_cron);
+        $process_queue_tasks_array = $this->getQueueTasksForProcessing($code, $expedite_mode, $invoked_by_magento_crontab);
         if (empty($process_queue_tasks_array))
         {
             return;
         }
 
-        // Update the last_executed_at value for these task rows so that the next cron iteration will pick up a different
-        //  set of BATCH_SIZE rows from the call to $this->getQueueTasksForProcessing($code); above
-        $this->updateLastExecutedAtToCurrentTime($process_queue_tasks_array);
+        /**
+         * Update the last_executed_at value for these task rows so that the next cron iteration will pick up a different
+         *  set of _batch_size rows from the call to $this->getQueueTasksForProcessing($code); above
+         * In the event that certain queue tasks instances might take much longer to execute than others, it may be
+         *  desirable to wait until the task is actually being selected for update to update the last_executed_at
+         *  timestamp
+         */
+        if (!$this->_wait_to_update_executed_timestamp)
+        {
+            $this->updateLastExecutedAtToCurrentTime($process_queue_tasks_array);
+        }
         foreach ($process_queue_tasks_array as $processQueueTaskObject) {
             $this->processQueueTask($processQueueTaskObject);
         }
@@ -237,7 +258,7 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         return $processQueueTaskCollection;
     }
 
-    public function getQueueTasksForProcessing($code = null, $expedite_mode = false, $invoked_by_cron = false)
+    public function getQueueTasksForProcessing($code = null, $expedite_mode = false, $invoked_by_magento_crontab = false)
     {
         $processQueueTaskCollection = Mage::getModel($this->_task_model_classname)->getCollection();
         /* @var $processQueueTaskCollection Dunagan_ProcessQueue_Model_Mysql4_Task_Collection */
@@ -247,7 +268,7 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
 
         if (!$expedite_mode)
         {
-            $processQueueTaskCollection->addLastExecutedAtThreshold();
+            $processQueueTaskCollection->addLastExecutedAtThreshold($this->_minutes_in_past_threshold);
         }
 
         if (!empty($code))
@@ -255,7 +276,7 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
             $processQueueTaskCollection->addCodeFilter($code);
         }
 
-        if ($invoked_by_cron)
+        if ($invoked_by_magento_crontab)
         {
             $taskHelper = Mage::helper('dunagan_process_queue/task');
             /* @var $taskHelper Dunagan_ProcessQueue_Helper_Task */
@@ -282,6 +303,45 @@ class Dunagan_ProcessQueue_Helper_Task_Processor extends Mage_Core_Helper_Data
         }
         $rows_updated = $this->_getTaskResourceSingleton()->updateLastExecutedAtToCurrentTime($task_ids);
         return $rows_updated;
+    }
+
+    /**
+     * Mutates the batch size. This is the maximum amount of queue tasks which will be selected for processing during
+     *      an execution of $this->processQueueTasks()
+     *
+     * @param $batch_size
+     * @return $this
+     */
+    public function setBatchSize($batch_size)
+    {
+        $this->_batch_size = $batch_size;
+        return $this;
+    }
+
+    /**
+     * Mutates the minutes in past threshold value. This is the threshold which will be used when selecting queue tasks
+     *  for processing during an execution of $this->processQueueTasks()
+     *
+     * @param int $minutes_in_past_threshold
+     * @return $this
+     */
+    public function setMinutesInPastThreshold($minutes_in_past_threshold)
+    {
+        $this->_minutes_in_past_threshold = $minutes_in_past_threshold;
+        return $this;
+    }
+
+    /**
+     * Mutator for the flag to wait to update the executed at timestamp for the tasks queried from the call to
+     *  getQueueTasksForProcessing()
+     *
+     * @param bool $should_wait
+     * @return $this
+     */
+    public function setWaitToUpdateExecutedAtTimestamp($should_wait = false)
+    {
+        $this->_wait_to_update_executed_timestamp = $should_wait;
+        return $this;
     }
 
     public function deleteAllTasks($task_codes)

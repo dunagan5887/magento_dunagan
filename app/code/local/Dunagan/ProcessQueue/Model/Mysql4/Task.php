@@ -46,8 +46,13 @@ class Dunagan_ProcessQueue_Model_Mysql4_Task extends Mage_Core_Model_Mysql4_Abst
             return false;
         }
         // Status here can be PENDING or ERROR
+        // As an additional safety measure, don't update any rows which are already processing or are already in a
+        //      a terminal state. This can occur with tasks which are to be parallel processed
+        $statuses_to_omit = array(Dunagan_ProcessQueue_Model_Task::STATUS_PROCESSING,
+                                    Dunagan_ProcessQueue_Model_Task::STATUS_ABORTED,
+                                    Dunagan_ProcessQueue_Model_Task::STATUS_COMPLETE);
         $current_status = $taskObject->getStatus();
-        if (Dunagan_ProcessQueue_Model_Task::STATUS_PROCESSING == $current_status)
+        if (in_array($current_status, $statuses_to_omit))
         {
             // Assume another execution thread is actively processing this task
             return false;
@@ -63,8 +68,7 @@ class Dunagan_ProcessQueue_Model_Mysql4_Task extends Mage_Core_Model_Mysql4_Abst
 
         $where_conditions_array = array('task_id=?' => $task_id,
                                         'status=?' => $current_status,
-                                        // As an additional safety measure, don't update any rows already in processing state
-                                        'status<>?' => Dunagan_ProcessQueue_Model_Task::STATUS_PROCESSING);
+                                        'status not in (?)' => $statuses_to_omit);
 
         $rows_updated = $this->_getWriteAdapter()->update($this->getMainTable(), $update_bind_array, $where_conditions_array);
         return $rows_updated;
