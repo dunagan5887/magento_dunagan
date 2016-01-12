@@ -31,10 +31,11 @@ class Dunagan_ProcessQueue_Model_Mysql4_Task_Collection extends Mage_Core_Model_
             $minutes_in_past = $this->_default_minutes_in_past_threshold;
         }
         $current_gmt_timestamp = Mage::getSingleton('core/date')->gmtTimestamp();
-        $second_in_past = $minutes_in_past * 60;
-        $last_executed_at_threshold = $current_gmt_timestamp - $second_in_past;
+        $second_in_past_timestamp = $minutes_in_past * 60;
+        $last_executed_at_threshold_timestamp = $current_gmt_timestamp - $second_in_past_timestamp;
+        $last_executed_at_threshold_datetime = date('Y-m-d H:i:s', $last_executed_at_threshold_timestamp);
 
-        $this->addFieldToFilter('last_executed_at', array('lt' => $last_executed_at_threshold));
+        $this->addFieldToFilter('last_executed_at', array('lt' => $last_executed_at_threshold_datetime));
         return $this;
     }
 
