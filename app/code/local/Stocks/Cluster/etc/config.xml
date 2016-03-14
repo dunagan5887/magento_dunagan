@@ -21,6 +21,9 @@
                     <line_graph_points>
                         <table>cluster_center_line_graph_points</table>
                     </line_graph_points>
+                    <symbol_xref>
+                        <table>xref_cluster_symbol</table>
+                    </symbol_xref>
                 </entities>
             </stocks_cluster_mysql4>
         </models>

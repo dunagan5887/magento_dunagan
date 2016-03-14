@@ -53,4 +53,10 @@ class Stocks_Cluster_Block_Adminhtml_Center_Index_Grid
 
         return parent::_prepareColumns();
     }
+
+    public function getRowUrl($row)
+    {
+        $object_param_name = 'cluster';
+        return $this->getUrl('adminhtml/StockCluster_member/index', array($object_param_name => $row->getClusterId()));
+    }
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Stocks_Symbol>
+            <version>0.0.1</version>
+        </Stocks_Symbol>
+    </modules>
+
+    <global>
+        <models>
+            <stocks_symbol>
+                <class>Stocks_Symbol_Model</class>
+                <resourceModel>stocks_symbol_mysql4</resourceModel>
+            </stocks_symbol>
+            <stocks_symbol_mysql4>
+                <class>Stocks_Symbol_Model_Mysql4</class>
+                <entities>
+                    <line_graph_points>
+                        <table>symbol_data_line_graph_points</table>
+                    </line_graph_points>
+                </entities>
+            </stocks_symbol_mysql4>
+        </models>
+
+        <helpers>
+            <stocks_symbol>
+                <class>Stocks_Symbol_Helper</class>
+            </stocks_symbol>
+        </helpers>
+
+        <blocks>
+            <stocks_symbol>
+                <class>Stocks_Symbol_Block</class>
+            </stocks_symbol>
+        </blocks>
+
+        <resources>
+            <stocks_symbol_setup>
+                <setup>
+                    <module>Stocks_Symbol</module>
+                </setup>
+            </stocks_symbol_setup>
+            <stocks_symbol_read>
+                <connection>
+                    <use>stocks_setup</use>
+                </connection>
+            </stocks_symbol_read>
+            <stocks_symbol_write>
+                <connection>
+                    <use>stocks_setup</use>
+                </connection>
+            </stocks_symbol_write>
+        </resources>
+    </global>
+</config>

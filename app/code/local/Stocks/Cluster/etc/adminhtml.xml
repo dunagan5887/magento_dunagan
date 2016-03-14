@@ -24,13 +24,16 @@
                 <children>
                     <stocks>
                         <children>
-                            <clusters translate="title" module="worldview_article">
+                            <clusters translate="title" module="stocks_cluster">
                                 <title>Stock Clusters</title>
                                 <sort_order>20</sort_order>
                                 <children>
-                                    <view_centers translate="title" module="worldview_article">
+                                    <view_centers translate="title" module="stocks_cluster">
                                         <title>View Stock Cluster Centers</title>
                                     </view_centers>
+                                    <view_members translate="title" module="stocks_cluster">
+                                        <title>View Stock Cluster Members</title>
+                                    </view_members>
                                 </children>
                             </clusters>
                         </children>
