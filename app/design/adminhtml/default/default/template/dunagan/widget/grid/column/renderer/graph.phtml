@@ -1,0 +1,39 @@
+<?php /* @var $this Stocks_Cluster_Block_Adminhtml_Widget_Grid_Column_Renderer_Graph */ ?>
+
+<?php $ordered_graph_points = $this->getOrderedGraphPoints() ?>
+<?php $cluster_id = $this->getClusterId() ?>
+<?php $graph_html_id = 'line_graph_' . $cluster_id ?>
+<?php $callback_function = 'drawChart' . $cluster_id ?>
+
+<script type="text/javascript">
+    google.charts.setOnLoadCallback(<?php echo $callback_function ?>);
+
+    function <?php echo $callback_function ?>() {
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('number', 'Span');
+        data.addColumn('number', 'Price');
+
+        data.addRows([
+            <?php foreach($ordered_graph_points as $span_label => $point) { ?>
+                <?php $span = intval(explode('_', $span_label)[1]) ?>
+                [<?php echo $span ?>,  <?php echo $point ?>],
+            <?php } ?>
+        ]);
+
+        var options = {
+            chart: {
+                title: 'Stock Cluster',
+                subtitle: 'Price in percentage change vs starting price'
+            },
+            width: 800,
+            height: 300
+        };
+
+        var chart = new google.charts.Line(document.getElementById('<?php echo $graph_html_id?>'));
+
+        chart.draw(data, options);
+    }
+</script>
+
+<div id="<?php echo $graph_html_id?>" style="width: 800px; height: 300px"></div>

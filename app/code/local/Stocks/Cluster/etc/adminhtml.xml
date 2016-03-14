@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <stocks>
+            <children>
+                <clusters translate="title" module="stocks_cluster">
+                    <title>Stock Clusters</title>
+                    <sort_order>10</sort_order>
+                    <children>
+                        <view_centers translate="title" module="stocks_cluster">
+                            <title>View Stock Cluster Centers</title>
+                            <sort_order>10</sort_order>
+                            <action>adminhtml/StockCluster_center/index</action>
+                        </view_centers>
+                    </children>
+                </clusters>
+            </children>
+        </stocks>
+    </menu>
+
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <stocks>
+                        <children>
+                            <clusters translate="title" module="worldview_article">
+                                <title>Stock Clusters</title>
+                                <sort_order>20</sort_order>
+                                <children>
+                                    <view_centers translate="title" module="worldview_article">
+                                        <title>View Stock Cluster Centers</title>
+                                    </view_centers>
+                                </children>
+                            </clusters>
+                        </children>
+                    </stocks>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

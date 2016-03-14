@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <stocks translate="title" module="stocks_base">
+            <title>Stocks</title>
+            <sort_order>15</sort_order>
+        </stocks>
+    </menu>
+
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <stocks translate="title" module="stocks_base">
+                        <title>Stocks</title>
+                        <sort_order>15</sort_order>
+                    </stocks>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

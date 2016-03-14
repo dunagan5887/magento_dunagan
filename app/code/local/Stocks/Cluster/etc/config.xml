@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Stocks_Cluster>
+            <version>0.0.1</version>
+        </Stocks_Cluster>
+    </modules>
+
+    <global>
+        <models>
+            <stocks_cluster>
+                <class>Stocks_Cluster_Model</class>
+                <resourceModel>stocks_cluster_mysql4</resourceModel>
+            </stocks_cluster>
+            <stocks_cluster_mysql4>
+                <class>Stocks_Cluster_Model_Mysql4</class>
+                <entities>
+                    <overall_delta_percentages>
+                        <table>cluster_center_overall_delta_percentages</table>
+                    </overall_delta_percentages>
+                    <line_graph_points>
+                        <table>cluster_center_line_graph_points</table>
+                    </line_graph_points>
+                </entities>
+            </stocks_cluster_mysql4>
+        </models>
+
+        <helpers>
+            <stocks_cluster>
+                <class>Stocks_Cluster_Helper</class>
+            </stocks_cluster>
+        </helpers>
+
+        <blocks>
+            <stocks_cluster>
+                <class>Stocks_Cluster_Block</class>
+            </stocks_cluster>
+        </blocks>
+
+        <resources>
+            <stocks_cluster_setup>
+                <setup>
+                    <module>Stocks_Cluster</module>
+                </setup>
+            </stocks_cluster_setup>
+            <stocks_cluster_read>
+                <connection>
+                    <use>stocks_setup</use>
+                </connection>
+            </stocks_cluster_read>
+            <stocks_cluster_write>
+                <connection>
+                    <use>stocks_setup</use>
+                </connection>
+            </stocks_cluster_write>
+        </resources>
+    </global>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <stocks_cluster after="Mage_Adminhtml">Stocks_Cluster_Adminhtml</stocks_cluster>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+</config>

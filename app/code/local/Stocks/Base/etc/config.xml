@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Stocks_Base>
+            <version>0.0.1</version>
+        </Stocks_Base>
+    </modules>
+
+    <global>
+        <models>
+            <stocks_base>
+                <class>Stocks_Base_Model</class>
+                <resourceModel>stocks_base_mysql4</resourceModel>
+            </stocks_base>
+            <stocks_base_mysql4>
+                <class>Stocks_Base_Model_Mysql4</class>
+            </stocks_base_mysql4>
+        </models>
+
+        <helpers>
+            <stocks_base>
+                <class>Stocks_Base_Helper</class>
+            </stocks_base>
+        </helpers>
+
+        <blocks>
+            <stocks_base>
+                <class>Stocks_Base_Block</class>
+            </stocks_base>
+        </blocks>
+    </global>
+</config>
