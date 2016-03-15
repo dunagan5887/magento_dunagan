@@ -13,7 +13,7 @@ class Stocks_Cluster_Block_Adminhtml_Member_Index_Grid
 
     public function setCollection($collection)
     {
-        /* @var $this Stocks_Cluster_Model_Mysql4_Xref_Collection */
+        /* @var $collection Stocks_Cluster_Model_Mysql4_Xref_Collection */
 
         $line_graph_points_table = $collection->getResource()->getTable('stocks_symbol/line_graph_points');
 
@@ -45,7 +45,8 @@ class Stocks_Cluster_Block_Adminhtml_Member_Index_Grid
             'type'      => 'text',
             'renderer'  => 'stocks_cluster/Adminhtml_Widget_Grid_Column_Renderer_Graph',
             'filter'    => false,
-            'sortable'  => false
+            'sortable'  => false,
+            'id_accessor' => 'getSymbol'
         ));
 
         return parent::_prepareColumns();

@@ -1,9 +1,9 @@
 <?php /* @var $this Stocks_Cluster_Block_Adminhtml_Widget_Grid_Column_Renderer_Graph */ ?>
 
 <?php $ordered_graph_points = $this->getOrderedGraphPoints() ?>
-<?php $cluster_id = $this->getClusterId() ?>
-<?php $graph_html_id = 'line_graph_' . $cluster_id ?>
-<?php $callback_function = 'drawChart' . $cluster_id ?>
+<?php $html_id_suffix = $this->getHtmlIdSuffix() ?>
+<?php $graph_html_id = 'line_graph_' . $html_id_suffix ?>
+<?php $callback_function = 'drawChart' . $html_id_suffix ?>
 
 <script type="text/javascript">
     google.charts.setOnLoadCallback(<?php echo $callback_function ?>);

@@ -141,6 +141,36 @@ class Dunagan_Base_Block_Adminhtml_Widget_Grid
     }
 
     /**
+     * @param Stocks_Cluster_Model_Mysql4_Center_Collection $collection
+     * @param Mage_Adminhtml_Block_Widget_Grid_Column $column
+     */
+    protected function _setRangeFilterAsHavingClause($collection, $column)
+    {
+        $filter = $column->getFilter();
+        $filter_value = $filter->getValue();
+
+        if((!is_array($filter_value)) || (empty($filter_value)))
+        {
+            return;
+        }
+
+        $from_value = isset($filter_value['from']) ? $filter_value['from'] : '';
+        $to_value = isset($filter_value['to']) ? $filter_value['to'] : '';
+
+        $having_param = $column->getHavingParam();
+        if (!empty($from_value))
+        {
+            $clause = $having_param . ' >= ?';
+            $collection->getSelect()->having($clause, $from_value);
+        }
+        if (!empty($to_value))
+        {
+            $clause = $having_param . ' <= ?';
+            $collection->getSelect()->having($clause, $to_value);
+        }
+    }
+
+    /**
      * @return Mage_Core_Helper_Abstract
      */
     protected function _getTranslationHelper()

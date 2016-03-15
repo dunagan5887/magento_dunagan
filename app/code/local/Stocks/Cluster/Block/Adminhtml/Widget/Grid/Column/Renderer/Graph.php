@@ -23,9 +23,10 @@ class Stocks_Cluster_Block_Adminhtml_Widget_Grid_Column_Renderer_Graph
         return $this->_toHtml();
     }
 
-    public function getClusterId()
+    public function getHtmlIdSuffix()
     {
-        return $this->getRowToRender()->getClusterId();
+        $id_accessor = $this->getColumn()->getIdAccessor();
+        return $this->getRowToRender()->$id_accessor();
     }
 
     public function getOrderedGraphPoints()
