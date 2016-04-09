@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <stocks>
+            <children>
+                <down translate="title" module="stocks_down">
+                    <title>Down Stocks</title>
+                    <sort_order>10</sort_order>
+                    <children>
+                        <view_centers translate="title" module="stocks_down">
+                            <title>View Down Stocks</title>
+                            <sort_order>10</sort_order>
+                            <action>adminhtml/StocksDown_index/index</action>
+                        </view_centers>
+                    </children>
+                </down>
+            </children>
+        </stocks>
+    </menu>
+
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <stocks>
+                        <children>
+                            <down translate="title" module="stocks_down">
+                                <title>Down Stocks</title>
+                                <sort_order>20</sort_order>
+                                <children>
+                                    <view_down_stocks translate="title" module="stocks_down">
+                                        <title>View Down Stocks</title>
+                                    </view_down_stocks>
+                                </children>
+                            </down>
+                        </children>
+                    </stocks>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

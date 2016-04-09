@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Stocks_Down>
+            <version>0.0.1</version>
+        </Stocks_Down>
+    </modules>
+
+    <global>
+        <models>
+            <stocks_down>
+                <class>Stocks_Down_Model</class>
+                <resourceModel>stocks_down_mysql4</resourceModel>
+            </stocks_down>
+            <stocks_down_mysql4>
+                <class>Stocks_Down_Model_Mysql4</class>
+                <entities>
+                    <stocks_down>
+                        <table>down_stocks</table>
+                    </stocks_down>
+                </entities>
+            </stocks_down_mysql4>
+        </models>
+
+        <helpers>
+            <stocks_down>
+                <class>Stocks_Down_Helper</class>
+            </stocks_down>
+        </helpers>
+
+        <blocks>
+            <stocks_down>
+                <class>Stocks_Down_Block</class>
+            </stocks_down>
+        </blocks>
+
+        <resources>
+            <stocks_down_setup>
+                <setup>
+                    <module>Stocks_Down</module>
+                </setup>
+            </stocks_down_setup>
+            <stocks_down_read>
+                <connection>
+                    <use>stocks_setup</use>
+                </connection>
+            </stocks_down_read>
+            <stocks_down_write>
+                <connection>
+                    <use>stocks_setup</use>
+                </connection>
+            </stocks_down_write>
+        </resources>
+    </global>
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <down_stocks after="Mage_Adminhtml">Stocks_Down_Adminhtml</down_stocks>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+</config>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Stocks_Down>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Dunagan_Base/>
+            </depends>
+        </Stocks_Down>
+    </modules>
+</config>

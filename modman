@@ -13,6 +13,7 @@ app/etc/modules/Dunagan_ProcessQueue.xml                         app/etc/modules
 app/etc/modules/Dunagan_Process.xml                              app/etc/modules/Dunagan_Process.xml
 app/etc/modules/Stocks_Base.xml                                  app/etc/modules/Stocks_Base.xml
 app/etc/modules/Stocks_Cluster.xml                               app/etc/modules/Stocks_Cluster.xml
+app/etc/modules/Stocks_Down.xml                                  app/etc/modules/Stocks_Down.xml
 app/etc/modules/Stocks_Symbol.xml                                app/etc/modules/Stocks_Symbol.xml
 app/etc/modules/Worldview_Article.xml                            app/etc/modules/Worldview_Article.xml
 app/etc/modules/Worldview_Base.xml                               app/etc/modules/Worldview_Base.xml

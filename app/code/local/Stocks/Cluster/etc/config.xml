@@ -16,10 +16,10 @@
                 <class>Stocks_Cluster_Model_Mysql4</class>
                 <entities>
                     <overall_delta_percentages>
-                        <table>cluster_center_overall_delta_percentages</table>
+                        <table>cluster_total_delta_percentages</table>
                     </overall_delta_percentages>
                     <line_graph_points>
-                        <table>cluster_center_line_graph_points</table>
+                        <table>cluster_line_graph_points</table>
                     </line_graph_points>
                     <symbol_xref>
                         <table>xref_cluster_symbol</table>
