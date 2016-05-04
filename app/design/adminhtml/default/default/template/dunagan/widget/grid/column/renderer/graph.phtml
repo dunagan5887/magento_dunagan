@@ -11,12 +11,14 @@
     function <?php echo $callback_function ?>() {
         var data = new google.visualization.DataTable();
 
-        data.addColumn('number', 'Span');
+        data.addColumn('number', 'Days In Past');
         data.addColumn('number', 'Price');
+
+        data.addRow([-365, 1.0]);
 
         data.addRows([
             <?php foreach($ordered_graph_points as $span_label => $point) { ?>
-                <?php $span = intval(explode('_', $span_label)[1]) ?>
+                <?php $span = -1 * intval(explode('_', $span_label)[1]); ?>
                 [<?php echo $span ?>,  <?php echo $point ?>],
             <?php } ?>
         ]);
