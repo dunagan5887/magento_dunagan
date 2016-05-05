@@ -15,7 +15,7 @@ class Stocks_Down_Adminhtml_StocksDown_IndexController
 
     public function getControllerActiveMenuPath()
     {
-        return 'stocks/clusters/view_centers';
+        return 'stocks/down/view_down_stocks';
     }
 
     public function getModuleInstanceDescription()

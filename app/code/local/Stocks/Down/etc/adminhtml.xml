@@ -7,11 +7,11 @@
                     <title>Down Stocks</title>
                     <sort_order>10</sort_order>
                     <children>
-                        <view_centers translate="title" module="stocks_down">
+                        <view_down_stocks translate="title" module="stocks_down">
                             <title>View Down Stocks</title>
                             <sort_order>10</sort_order>
                             <action>adminhtml/StocksDown_index/index</action>
-                        </view_centers>
+                        </view_down_stocks>
                     </children>
                 </down>
             </children>

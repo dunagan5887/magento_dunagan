@@ -39,4 +39,9 @@ class Stocks_Down_Block_Adminhtml_Index_Grid extends Dunagan_Base_Block_Adminhtm
 
         return parent::_prepareColumns();
     }
+
+    public function getRowUrl($row)
+    {
+        return '#';
+    }
 }
