@@ -16,7 +16,7 @@
                 <class>Stocks_Symbol_Model_Mysql4</class>
                 <entities>
                     <line_graph_points>
-                        <table>symbol_line_graph_points</table>
+                        <table>symbol_data_line_graph_points</table>
                     </line_graph_points>
                 </entities>
             </stocks_symbol_mysql4>
