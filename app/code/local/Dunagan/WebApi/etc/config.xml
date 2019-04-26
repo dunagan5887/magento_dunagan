@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Dunagan_WebApi>
+            <version>0.0.1</version>
+        </Dunagan_WebApi>
+    </modules>
+
+    <global>
+        <models>
+            <dunagan_web_api>
+                <class>Dunagan_WebApi_Model</class>
+                <resourceModel>dunagan_web_api_mysql4</resourceModel>
+            </dunagan_web_api>
+            <dunagan_web_api_mysql4>
+                <class>Dunagan_WebApi_Model_Mysql4</class>
+            </dunagan_web_api_mysql4>
+        </models>
+
+        <helpers>
+            <dunagan_web_api>
+                <class>Dunagan_WebApi_Helper</class>
+            </dunagan_web_api>
+        </helpers>
+    </global>
+</config>
